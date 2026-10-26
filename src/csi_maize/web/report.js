@@ -95,7 +95,7 @@ function renderModel(mesh) {
       context.fill();
     });
     context.fillStyle = "#b6cdc0";
-    context.font = "12px system-ui, sans-serif";
+    context.font = "12px \"Times New Roman\", Times, serif";
     context.fillText(
       "Display orbit only · fitted acquisition camera remains fixed",
       18,
@@ -169,7 +169,7 @@ function renderResponses(rows) {
     canvas.style.height = `${height}px`;
     const context = canvas.getContext("2d");
     context.scale(ratio, ratio);
-    context.fillStyle = "#fffdf7";
+    context.fillStyle = "#ffffff";
     context.fillRect(0, 0, width, height);
     const bound =
       Math.max(0.01, ...baseline.map((row) => Math.abs(row.receiver))) * 1.15;
@@ -210,7 +210,7 @@ function renderResponses(rows) {
         context.fill();
       });
       context.fillStyle = "#163e35";
-      context.font = "13px system-ui, sans-serif";
+      context.font = "13px \"Times New Roman\", Times, serif";
       context.fillText(
         mode.replace("_degrees", "") + " · signed receiver fraction",
         left,

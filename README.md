@@ -1,6 +1,7 @@
 # CSI-MAIZE
 
-**Zenodo data and reference results: link pending.**
+**Data and reference outputs will be made available via Zenodo after publication.**
+The deposit link will be added here.
 <!-- ZENODO_RECORD_URL: replace this line with the verified public deposit link. -->
 
 Circular maize imaging and leaf-scale architectural experiments.
@@ -26,7 +27,7 @@ Open `runs/example/reports/CSI_maize_architecture.html`. The HTML embeds its mes
 
 ## Recompute the study from its inputs
 
-The raw-data route requires the original images, spreadsheets and supplied observation seeds, plus the pinned model assets. The Zenodo link above will identify the archival inputs when the deposit is available. We do not substitute cached results for a raw run.
+The raw-data route requires the original images, spreadsheets and supplied observation seeds, plus the pinned model assets. The Zenodo link above will identify the archival inputs after publication, when the deposit is available. We do not substitute cached results for a raw run.
 
 ```sh
 csi-maize init --data-root /path/to/data --work-dir runs/publication --models-root /path/to/model-cache
@@ -37,7 +38,7 @@ csi-maize run --config runs/publication/run_config.json
 csi-maize verify --run runs/publication
 ```
 
-Install the `learning` extra and the appropriate PyTorch build before this route. [Reproduction instructions](docs/reproduction.md) cover CPU/CUDA environments, offline execution, individual stages, interruption/resume and the expected input layout. Asset downloads occur only through the explicit preparation command; analysis stages reject outbound network access.
+Install the `learning` extra and the appropriate CUDA PyTorch build before this route. The complete raw workflow requires an NVIDIA CUDA device; the controlled example runs on CPU. [Reproduction instructions](docs/reproduction.md) cover CPU/CUDA environments, offline execution, individual stages, interruption/resume and the expected input layout. Asset downloads occur only through the explicit preparation command; analysis stages reject outbound network access.
 
 Each run uses a separate workspace. Its manifest records source code, configuration, raw inputs, dependency versions, checkpoints and output hashes. Resume verifies these records before reusing results. Source folders are registered separately from generated outputs.
 

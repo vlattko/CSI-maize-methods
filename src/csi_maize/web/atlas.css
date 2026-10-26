@@ -1,7 +1,7 @@
 :root {
   --ink: #17322d;
   --muted: #55655e;
-  --paper: #f5f3ec;
+  --paper: #ffffff;
   --line: #ccd3c8;
   --accent: #126d65;
 }
@@ -13,8 +13,9 @@ body {
   background: var(--paper);
   color: var(--ink);
   font:
-    16px/1.6 system-ui,
-    sans-serif;
+    16px/1.6 "Times New Roman",
+    Times,
+    serif;
 }
 header,
 main,
@@ -28,7 +29,8 @@ header {
 }
 h1 {
   font:
-    clamp(40px, 6vw, 76px) / 1.06 Georgia,
+    clamp(40px, 6vw, 76px) / 1.06 "Times New Roman",
+    Times,
     serif;
   max-width: 950px;
   margin: 15px 0 25px;
@@ -36,7 +38,8 @@ h1 {
 }
 h2 {
   font:
-    36px/1.2 Georgia,
+    36px/1.2 "Times New Roman",
+    Times,
     serif;
   margin: 0 0 20px;
 }
@@ -232,11 +235,12 @@ summary {
 pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  background: #e9ede4;
+  background: #ffffff;
   padding: 20px;
   font:
-    12px/1.7 ui-monospace,
-    monospace;
+    12px/1.7 "Times New Roman",
+    Times,
+    serif;
 }
 table {
   border-collapse: collapse;
@@ -268,7 +272,7 @@ td.formula {
   color: #8f631c;
 }
 .formula {
-  font-family: ui-monospace, monospace;
+  font-family: "Times New Roman", Times, serif;
 }
 .resource {
   margin: 15px 0;

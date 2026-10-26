@@ -20,7 +20,7 @@ For the raw study workflow, install SAM/YOLO dependencies too:
 python -m pip install -e ".[learning]"
 ```
 
-The study's Windows CUDA 12.8 dependency closure is pinned in `requirements/cuda128-py312-windows.txt`. Install it in a separate Python 3.12 environment with a compatible NVIDIA driver, then install this repository. The CPU and CUDA lock files describe different environments; do not combine them. Platform-specific PyTorch builds and drivers must match. A CPU installation can execute numerical stages but is substantially slower for the complete image/model workflow.
+The study's Windows CUDA 12.8 dependency closure is pinned in `requirements/cuda128-py312-windows.txt`. Install it in a separate Python 3.12 environment with a compatible NVIDIA driver, then install this repository. The CPU and CUDA lock files describe different environments; do not combine them. Platform-specific PyTorch builds and drivers must match. The complete raw study workflow currently requires an NVIDIA CUDA device: the frozen SAM and embedding producers select CUDA explicitly. CPU execution is verified for the controlled example and compatible numerical operators, not for the complete raw image/model workflow.
 
 The optional YOLO component has separate upstream licence conditions described in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). Plotting uses bundled DejaVu Sans. Pretrained model binaries are not shipped in this repository.
 
@@ -106,3 +106,7 @@ Resume checks the original input bytes, registered binding topology, copied work
 ## Storage and execution time
 
 Real-image execution needs the raw data, roughly 300 MB of declared pretrained assets, and space for masks, predictions, fitted geometry, logs and all numerical outputs. Runtime depends on GPU, image I/O and fitting settings. The controlled example is suitable for CI; the complete archive workflow is not substituted by that example. The current execution evidence is kept in [validation.md](validation.md).
+
+## Data availability
+
+Data and reference outputs will be made available via Zenodo after publication. The README will link to the public deposit when it is available. The methods code is available at https://github.com/vlattko/CSI-maize-methods.

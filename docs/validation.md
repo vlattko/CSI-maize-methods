@@ -35,7 +35,7 @@ The controlled example executes three- and five-leaf cases without a model downl
 - The source-contributor validity used for spatial maps is stricter than the earlier post-interpolation target summaries; the two availability counts are not interchangeable.
 - Neither a completed computational run nor agreement between weak teachers establishes persistent physical leaf identity or corresponding tissue.
 
-The Zenodo deposit will supply permanent data/reference-result identifiers. Until that record exists, the repository makes no claim of a published complete dataset.
+Data and reference outputs will be made available via Zenodo after publication. The deposit will supply permanent identifiers. Until that record exists, the repository makes no claim of a published complete dataset.
 
 
 ## Test accounting and CI artifacts

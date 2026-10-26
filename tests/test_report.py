@@ -321,6 +321,20 @@ class ReportTests(unittest.TestCase):
             self.assertNotIn("remote.js", text)
             self.assertIn("Spatial atlas unavailable", text)
 
+    def test_atlas_typography_preserves_application_json_exactly(self):
+        from csi_maize.report import format_atlas_html
+
+        payload = """{"text":"ctx.font='13px sans-serif'","values":[0.1,null,2]}"""
+        source = (
+            '<html><head><style>body{background:beige}</style></head><body><script type="application/json">'
+            + payload
+            + """</script><script>ctx.font='13px sans-serif';</script></body></html>"""
+        )
+        formatted = format_atlas_html(source)
+        self.assertIn('<script type="application/json">' + payload + "</script>", formatted)
+        self.assertIn("--paper: #ffffff", formatted)
+        self.assertIn("Times New Roman", formatted)
+
     def test_template_merges_readable_assets_and_preserves_all_population_tokens(self):
         _, template = self.api()
         text = template()

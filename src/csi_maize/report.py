@@ -326,6 +326,33 @@ class _ResourceCheck(HTMLParser):
             self.safe = False
 
 
+def format_atlas_html(source: str) -> str:
+    """Apply the shared journal typography without changing embedded observations."""
+    head_end = source.lower().find("</head>")
+    if head_end >= 0:
+        head = source[:head_end]
+        head = re.sub(
+            r"<style\b[^>]*>.*?</style>",
+            lambda _: "<style>\n" + (WEB / "atlas.css").read_text(encoding="utf-8") + "\n</style>",
+            head,
+            count=1,
+            flags=re.S | re.I,
+        )
+        source = head + source[head_end:]
+
+    def drawing_font(match):
+        opening, code, closing = match.groups()
+        if "application/json" in opening.lower():
+            return match.group(0)
+        code = code.replace(
+            "ctx.font='13px sans-serif'",
+            "ctx.font='13px \"Times New Roman\", Times, serif'",
+        )
+        return opening + code + closing
+
+    return re.sub(r"(<script\b[^>]*>)(.*?)(</script>)", drawing_font, source, flags=re.S | re.I)
+
+
 def _atlas(outputs: Path):
     paths = sorted(outputs.glob("spatial_fusion/*/CSI_maize_RGB_NoIR_spatial_atlas.html"))
     if not paths:
@@ -333,7 +360,7 @@ def _atlas(outputs: Path):
             "Spatial atlas unavailable",
             "The supporting observation stage has no generated self-contained atlas in this workspace.",
         )
-    source = paths[-1].read_text(encoding="utf-8")
+    source = format_atlas_html(paths[-1].read_text(encoding="utf-8"))
     # Remove the original template's dormant local-viewer fallback and purely
     # internal preservation note. The scientific payload is left unchanged.
     source = source.replace(

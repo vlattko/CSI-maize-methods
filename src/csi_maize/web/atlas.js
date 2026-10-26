@@ -135,7 +135,7 @@ if (rawAtlasData.trim().startsWith("_")) {
     ctx.lineTo(1065, 210);
     ctx.stroke();
     ctx.fillStyle = "#52665d";
-    ctx.font = "13px sans-serif";
+    ctx.font = "13px \"Times New Roman\", Times, serif";
     ctx.fillText(max + " px", 5, 35);
     ctx.fillText("0", 35, 213);
     [0, 10, 20, 30, 39].forEach((v) => ctx.fillText(v, x(v) - 5, 235));

@@ -21,3 +21,5 @@ install_validation.txt
 .env
 .env.*
 !.env.example
+
+.ci-venv/

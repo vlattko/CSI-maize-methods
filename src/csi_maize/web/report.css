@@ -1,7 +1,7 @@
 :root {
   --ink: #163e35;
   --muted: #53665d;
-  --paper: #f5f2e9;
+  --paper: #ffffff;
   --accent: #08756b;
   --gold: #af7a22;
   --line: #ced7c9;
@@ -17,8 +17,9 @@ body {
   color: var(--ink);
   background: var(--paper);
   font:
-    16px/1.65 system-ui,
-    sans-serif;
+    16px/1.65 "Times New Roman",
+    Times,
+    serif;
 }
 .hero,
 main,
@@ -40,14 +41,16 @@ footer {
 }
 h1 {
   font:
-    clamp(42px, 6vw, 80px) / 1.04 Georgia,
+    clamp(42px, 6vw, 80px) / 1.04 "Times New Roman",
+    Times,
     serif;
   letter-spacing: -0.035em;
   margin: 24px 0;
 }
 h2 {
   font:
-    clamp(30px, 3.8vw, 48px) / 1.13 Georgia,
+    clamp(30px, 3.8vw, 48px) / 1.13 "Times New Roman",
+    Times,
     serif;
   letter-spacing: -0.02em;
   margin: 15px 0 26px;
@@ -110,7 +113,7 @@ section {
   border: 1px dashed #a5b5a5;
   padding: 20px 26px;
   margin-top: 25px;
-  background: #f9f8f2;
+  background: #ffffff;
 }
 .missing h3 {
   margin: 0 0 6px;
@@ -138,7 +141,7 @@ select,
 button {
   padding: 10px 16px;
   border: 1px solid #a0b6a5;
-  background: #fffdf7;
+  background: #ffffff;
   color: var(--ink);
   font: inherit;
   border-radius: 3px;
@@ -164,7 +167,7 @@ canvas {
 #response-chart {
   height: 320px;
   margin: 30px 0;
-  background: #fffdf7;
+  background: #ffffff;
 }
 .table-scroll {
   overflow: auto;
@@ -189,7 +192,7 @@ th {
   font-weight: 600;
 }
 tbody tr:hover {
-  background: #e9eee2;
+  background: #ffffff;
 }
 iframe {
   display: block;
