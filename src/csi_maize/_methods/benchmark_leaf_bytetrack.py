@@ -4,12 +4,25 @@ from multimodal_leaf_core import *
 from bootstrap import write_csv
 from types import SimpleNamespace
 import collections
+import inspect
+
+
+def tracker_source_sha256(tracker_class):
+    """Bind provenance to the implementation actually supplied by the environment."""
+    try:
+        source = inspect.getsourcefile(tracker_class)
+    except TypeError:
+        source = None
+    if source is None or not Path(source).is_file():
+        raise RuntimeError("Cannot inspect the imported tracker Python source")
+    return sha(source)
 
 
 def main():
     from ultralytics.trackers.byte_tracker import BYTETracker
     from ultralytics.engine.results import Boxes
 
+    tracker_digest = tracker_source_sha256(BYTETracker)
     summaries = []
     out = []
     for p in sorted((DEST / "predictions").glob("*.json")):
@@ -88,7 +101,7 @@ def main():
             "sequences": len(summaries),
             "assigned_observations": len(out),
             "code_sha256": sha(__file__),
-            "tracker_source_sha256": sha(BASE / "yolo_deps/ultralytics/trackers/byte_tracker.py"),
+            "tracker_source_sha256": tracker_digest,
             "interpretation": "Fragmentation and output retention, not correct leaf identity. No training or teacher IDs supplied.",
         },
     )

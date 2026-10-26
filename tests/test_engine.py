@@ -198,3 +198,20 @@ def test_first_execution_rejects_changed_copied_workbook(tmp_path):
     (cfg.work_dir / "assay.xlsx").write_bytes(b"edited copy")
     with pytest.raises(ValueError, match="workbook"):
         execute(cfg, ["one"], stages=stages)
+
+
+def test_resume_rejects_changed_scikit_learn_runtime(tmp_path):
+    from csi_maize import engine
+    from unittest.mock import patch
+
+    cfg, stages = fixture(tmp_path)
+    execute(cfg, ["two"], stages=stages)
+    original = engine.metadata.version
+
+    def changed(name):
+        value = original(name)
+        return "changed-" + value if name == "scikit-learn" else value
+
+    with patch.object(engine.metadata, "version", side_effect=changed):
+        with pytest.raises(ValueError, match="runtime|Runtime|environment"):
+            execute(cfg, ["two"], stages=stages, resume=True)

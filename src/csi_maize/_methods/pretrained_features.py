@@ -1,25 +1,12 @@
-"""Frozen DINOv2 representations and relative monocular-depth demonstrations."""
+"""Frozen DINOv2 representations for the declared SAM foreground crops."""
 
-from common import workspace_relative
-
-from bootstrap import (
-    BASE,
-    ROOT,
-    OUT,
-    read_csv,
-    write_csv,
-    model_directory,
-    publication_case,
-    method_config,
-)
-from traits import load_image
-import argparse, json, hashlib
+from bootstrap import OUT, read_csv, model_directory, publication_case, method_config
+import argparse
+import json
 import numpy as np
 import torch
-from PIL import Image, ImageOps, ImageDraw
-from transformers import AutoImageProcessor, AutoModel, AutoModelForDepthEstimation
-from scipy.stats import mannwhitneyu
-import cv2
+from PIL import Image, ImageOps
+from transformers import AutoImageProcessor, AutoModel
 
 
 def embeddings():
@@ -77,119 +64,8 @@ def embeddings():
     (OUT / "dinov2_manifest.json").write_text(json.dumps(meta, indent=2))
 
 
-def depth():
-    folder = OUT / "relative_depth"
-    folder.mkdir(exist_ok=True)
-    directory = model_directory("Depth-Anything-V2-Small-hf")
-    processor = AutoImageProcessor.from_pretrained(directory, use_fast=False)
-    model = AutoModelForDepthEstimation.from_pretrained(directory).to("cuda").eval()
-    torch.set_num_threads(4)
-    manifests = json.loads((BASE / "models/pretrained_manifest.json").read_text(encoding="utf-8"))
-    revision = next(r["revision"] for r in manifests if r["model"].endswith("Small-hf"))
-    records = [
-        r
-        for r in read_csv(OUT / "sessions.csv")
-        if r["session"].endswith(("capture_session_C1_1-1", "capture_session_C2_5-1"))
-    ]
-    rows = []
-    for record in records:
-        for path in sorted((ROOT / record["session"] / "rgb").glob("*.jpg")):
-            idx = int(path.stem.rsplit("_", 1)[1])
-            if idx not in [0, 10, 20, 30]:
-                continue
-            image, native = load_image(path)
-            h, w = image.shape[:2]
-            inputs = processor(images=Image.fromarray(image), return_tensors="pt").to("cuda")
-            with torch.inference_mode():
-                prediction = model(**inputs).predicted_depth
-                array = (
-                    torch.nn.functional.interpolate(
-                        prediction.unsqueeze(1), size=(h, w), mode="bicubic", align_corners=False
-                    )[0, 0]
-                    .cpu()
-                    .numpy()
-                )
-            stem = path.parent.parent.name + "__rgb__" + str(idx).zfill(3)
-            # Use the SAM comparison box mask, identical processing coordinates.
-            mask = (
-                np.array(
-                    Image.open(
-                        OUT
-                        / "sam_comparison"
-                        / (path.parent.parent.name + "__rgb__" + str(idx).zfill(3) + "__box.png")
-                    )
-                )
-                > 0
-            )
-            if array.shape != mask.shape:
-                raise ValueError("Depth/mask coordinates differ")
-            np.savez_compressed(folder / (stem + ".npz"), relative_inverse_depth=array, mask=mask)
-            low, high = np.percentile(array, [1, 99])
-            norm = np.clip((array - low) / max(float(high - low), 1e-8), 0, 1)
-            colours = cv2.cvtColor(
-                cv2.applyColorMap((norm * 255).astype(np.uint8), cv2.COLORMAP_TURBO),
-                cv2.COLOR_BGR2RGB,
-            )
-            isolated = colours.copy()
-            isolated[~mask] = [15, 29, 24]
-            canvas = Image.new("RGB", (w * 3, h + 60), "#10231d")
-            draw = ImageDraw.Draw(canvas)
-            for j, (title, view) in enumerate(
-                [
-                    ("Source RGB", image),
-                    ("Relative inverse depth", colours),
-                    ("SAM foreground / same depth map", isolated),
-                ]
-            ):
-                canvas.paste(Image.fromarray(view), (j * w, 60))
-                draw.text((j * w + 12, 12), title, fill="white")
-            draw.text(
-                (12, 35),
-                stem
-                + " | learned relative depth; no metric scale or reconstruction accuracy validation",
-                fill="#e7b46b",
-            )
-            canvas.save(folder / (stem + ".jpg"), quality=91)
-            foreground = array[mask]
-            background = array[~mask][::50]
-            separation = float(
-                mannwhitneyu(foreground[::5], background, alternative="two-sided").statistic
-                / (len(foreground[::5]) * len(background))
-            )
-            rows.append(
-                {
-                    "sample": stem,
-                    "image": workspace_relative(path),
-                    "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-                    "foreground_median": float(np.median(foreground)),
-                    "background_median": float(np.median(background)),
-                    "plant_background_rank_separation": separation,
-                    "validation_status": "relative_depth_demonstration_no_ground_truth",
-                }
-            )
-            print("DEPTH", stem, "separation", round(separation, 4), flush=True)
-    write_csv(folder / "metrics.csv", rows)
-    (folder / "manifest.json").write_text(
-        json.dumps(
-            {
-                "model": "depth-anything/Depth-Anything-V2-Small-hf",
-                "revision": revision,
-                "images": len(rows),
-                "quantity": "relative inverse depth, arbitrary scale; greater values conventionally nearer",
-                "limitations": [
-                    "No calibrated metric distance",
-                    "Foreground/background ranking is not geometric accuracy",
-                    "Independent monocular predictions do not establish consistent multiview geometry",
-                    "Thin leaves and dark background are a challenging transfer domain",
-                ],
-            },
-            indent=2,
-        )
-    )
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=["embeddings", "depth"])
-    args = parser.parse_args()
-    embeddings() if args.mode == "embeddings" else depth()
+    parser.add_argument("mode", choices=["embeddings"])
+    parser.parse_args()
+    embeddings()

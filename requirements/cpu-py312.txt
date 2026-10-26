@@ -46,5 +46,6 @@ sympy==1.14.0
 threadpoolctl==3.7.0
 tifffile==2026.10.15
 torch==2.8.0+cpu
+trimesh==5.1.1
 typing_extensions==4.16.0
 tzdata==2026.5

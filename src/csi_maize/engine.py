@@ -90,6 +90,20 @@ def _versions():
         "opencv-python",
         "matplotlib",
         "scikit-image",
+        "scikit-learn",
+        "threadpoolctl",
+        "jsonschema",
+        "trimesh",
+        "huggingface-hub",
+        "safetensors",
+        "tokenizers",
+        "lap",
+        "einops",
+        "omegaconf",
+        "PyYAML",
+        "ultralytics-thop",
+        "ultralytics-platform",
+        "polars",
     ):
         try:
             result[name] = metadata.version(name)

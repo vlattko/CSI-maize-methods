@@ -40,7 +40,7 @@ Data and reference outputs will be made available via Zenodo after publication. 
 
 ## Test accounting and CI artifacts
 
-Local source verification passed 113 public pytest tests and seven subtests. The canonical CPU suite executed through the bridge recorded 128 tests, 127 successful tests, one CUDA-unavailable skip and four successful subtests, with no failures or errors. These counts describe different discovery levels and are not added together.
+Local source verification passed 117 public pytest tests and seven subtests. The canonical CPU suite executed through the bridge recorded 128 tests, 127 successful tests, one CUDA-unavailable skip and four successful subtests, with no failures or errors. These counts describe different discovery levels and are not added together.
 
 The public pytest suite contains a bridge that discovers every shipped canonical `test_*.py` module and explicitly includes `v5_pair_controls_test.py`, whose filename is outside that discovery pattern. It writes strict JSON with discovered/run/successful test counts, individual skips and reasons, failures/errors, successful/failed subtest counts, module names, elapsed time and Python/PyTorch/CUDA availability. A skipped CUDA parity case is reported explicitly and is not included in the successful-test count.
 
@@ -50,9 +50,9 @@ The CI workflow targets Python 3.12 on Windows and Ubuntu CPU runners. The Windo
 
 ## Environment scope
 
-`requirements/cpu-py312.txt` records the locally checked CPU environment and `requirements/cuda128-py312-windows.txt` records the Windows CUDA 12.8 scientific dependency closure. The dependency-metadata audit found every reachable installed scientific dependency pinned and satisfying its declared version constraints: 48 distributions in the CPU/test closure and 68 in the Windows GPU publication/learning closure at inspection. These files use regular `opencv-python`, consistently with package metadata and Ultralytics. Do not install a second headless OpenCV distribution into the same environment.
+`requirements/cpu-py312.txt` records the locally checked CPU environment and `requirements/cuda128-py312-windows.txt` records the Windows CUDA 12.8 scientific dependency closure. The dependency-metadata audit found every reachable installed scientific dependency pinned and satisfying its declared version constraints: the pinned CPU/test and Windows GPU publication/learning dependency closures at inspection. These files use regular `opencv-python`, consistently with package metadata and Ultralytics. Do not install a second headless OpenCV distribution into the same environment.
 
-The CUDA snapshot intentionally excludes unrelated packages inherited from document-authoring environments. A broad seeded environment can therefore have unrelated `pip check` findings that are outside the released scientific dependency graph. Fresh environment installation and `pip check` remain separate acceptance checks. The version snapshots do not contain wheel hashes or pin a particular NVIDIA driver and are not a promise of bit-identical computation across operating systems or GPUs.
+The CUDA snapshot excludes unrelated document-authoring packages. A fresh installation of this lock in an isolated Python 3.12 environment passed `pip check` and completed the four-stage original-data SAM comparison workflow: workbook ingestion, indexing, verified model preparation and real-image inference. Its 109 generated outputs and original inputs passed manifest verification. This check is separate from the complete publication/learning run, which remains in progress. The version snapshots do not contain wheel hashes or pin a particular NVIDIA driver and are not a promise of bit-identical computation across operating systems or GPUs.
 
 ## Declared-output audit
 

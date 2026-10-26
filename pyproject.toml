@@ -18,7 +18,7 @@ dependencies = [
   "numpy>=1.26,<3", "scipy>=1.13,<2", "Pillow>=10,<14",
   "openpyxl>=3.1,<4", "matplotlib>=3.8,<4", "opencv-python>=4.10,<6",
   "scikit-image>=0.24,<0.27", "scikit-learn>=1.5,<2", "threadpoolctl>=3.5,<4",
-  "jsonschema>=4.20,<5",
+  "jsonschema>=4.20,<5", "trimesh>=5.1,<6",
 ]
 
 [project.optional-dependencies]
