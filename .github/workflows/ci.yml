@@ -1,0 +1,105 @@
+name: Numerical methods and controlled example
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  cpu:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      CSI_MAIZE_CANONICAL_SUMMARY: runs/ci-canonical-summary.json
+      HF_HUB_OFFLINE: '1'
+      TRANSFORMERS_OFFLINE: '1'
+      YOLO_OFFLINE: 'true'
+      YOLO_AUTOINSTALL: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements/cpu-py312.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install the CPU environment
+        run: |
+          python -m pip install -r requirements/cpu-py312.txt
+          python -m pip install -e ".[test]"
+          python -m pip check
+      - name: Check source and JavaScript syntax
+        run: |
+          python -m ruff format --check src tests
+          python -m ruff check src tests --select E9,F63,F7,F82
+          python -m compileall -q src
+          node --check src/csi_maize/web/report.js
+          node --check src/csi_maize/web/atlas.js
+      - name: Run all tests and record canonical numerical counts
+        run: python -m pytest tests -q --junitxml=runs/ci-pytest.xml
+      - name: Build and inspect installable distributions
+        run: |
+          python -m build
+          python - <<'PY'
+          from email.parser import Parser
+          from pathlib import Path
+          import tarfile
+          import zipfile
+          wheel = next(Path('dist').glob('*.whl'))
+          with zipfile.ZipFile(wheel) as archive:
+              names = archive.namelist()
+              required = ('csi_maize/assets_manifest.json', 'csi_maize/ultralytics_offline.py',
+                          'csi_maize/web/report.html', 'csi_maize/web/report.css',
+                          'csi_maize/web/report.js', 'csi_maize/web/atlas.html',
+                          'csi_maize/web/atlas.css', 'csi_maize/web/atlas.js')
+              assert all(name in names for name in required)
+              for name in ('LICENSE', 'THIRD_PARTY_NOTICES.md'):
+                  assert any(path.endswith('.dist-info/licenses/' + name) for path in names)
+              metadata = Parser().parsestr(archive.read(next(name for name in names if name.endswith('.dist-info/METADATA'))).decode())
+              assert metadata['License-Expression'] == 'MIT'
+              assert set(metadata.get_all('License-File')) == {'LICENSE', 'THIRD_PARTY_NOTICES.md'}
+              assert not any(name.endswith(('.pt', '.pth', '.safetensors', '.onnx')) for name in names)
+          with tarfile.open(next(Path('dist').glob('*.tar.gz'))) as archive:
+              names = archive.getnames()
+              assert any(name.endswith('/LICENSE') for name in names)
+              assert any(name.endswith('/THIRD_PARTY_NOTICES.md') for name in names)
+          print('Wheel assets, source notices and PEP 639 metadata verified')
+          PY
+      - name: Install the wheel and execute its controlled example
+        run: |
+          python -m pip install --no-deps --force-reinstall dist/*.whl
+          python -I - <<'PY'
+          from importlib.resources import files
+          from pathlib import Path
+          import csi_maize
+          assert not Path(csi_maize.__file__).resolve().is_relative_to((Path.cwd() / 'src').resolve())
+          assert files('csi_maize').joinpath('assets_manifest.json').is_file()
+          assert files('csi_maize').joinpath('web/report.html').is_file()
+          print('Importing installed wheel:', csi_maize.__file__)
+          PY
+          python -I -m csi_maize example --output runs/ci-example --steps 30
+          python -I -m csi_maize verify --run runs/ci-example
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-${{ matrix.os }}
+          if-no-files-found: warn
+          path: |
+            runs/ci-canonical-summary.json
+            runs/ci-pytest.xml
+            runs/ci-example/reports/CSI_maize_architecture.html
+            runs/ci-example/verification.json
+            runs/ci-example/run_manifest.json
+            dist/*.whl
+            dist/*.tar.gz

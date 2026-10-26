@@ -1,0 +1,310 @@
+:root {
+  --ink: #17322d;
+  --muted: #55655e;
+  --paper: #f5f3ec;
+  --line: #ccd3c8;
+  --accent: #126d65;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    16px/1.6 system-ui,
+    sans-serif;
+}
+header,
+main,
+footer {
+  max-width: 1440px;
+  margin: auto;
+  padding: 45px 5%;
+}
+header {
+  padding-top: 65px;
+}
+h1 {
+  font:
+    clamp(40px, 6vw, 76px) / 1.06 Georgia,
+    serif;
+  max-width: 950px;
+  margin: 15px 0 25px;
+  letter-spacing: -2px;
+}
+h2 {
+  font:
+    36px/1.2 Georgia,
+    serif;
+  margin: 0 0 20px;
+}
+h3 {
+  font-size: 18px;
+}
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.lead {
+  font-size: 21px;
+  max-width: 850px;
+}
+.muted,
+.small {
+  color: var(--muted);
+}
+.small {
+  font-size: 13px;
+}
+a {
+  color: var(--accent);
+}
+nav {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+.metrics {
+  display: flex;
+  gap: 35px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+  margin-top: 30px;
+}
+.metrics b {
+  display: block;
+  font-size: 29px;
+}
+.metrics span {
+  font-size: 13px;
+}
+section {
+  padding: 35px 0 55px;
+  border-bottom: 1px solid var(--line);
+}
+.controls {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: end;
+  margin: 20px 0;
+}
+label {
+  font-size: 13px;
+  display: block;
+}
+select,
+button {
+  font: inherit;
+  padding: 10px;
+  border: 1px solid #a9b9ae;
+  background: #fff;
+  color: var(--ink);
+  border-radius: 3px;
+}
+button {
+  cursor: pointer;
+}
+select {
+  max-width: 100%;
+}
+label input {
+  display: block;
+  width: 220px;
+}
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+figure {
+  margin: 0;
+}
+figure img,
+.stage {
+  background: black;
+  display: block;
+  width: 100%;
+  height: 380px;
+  object-fit: contain;
+}
+figcaption {
+  font-size: 13px;
+  margin: 8px 0 15px;
+}
+.stage {
+  position: relative;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+#mapView {
+  height: 380px;
+}
+.notice {
+  border-left: 3px solid #af8138;
+  padding-left: 15px;
+  max-width: 1000px;
+}
+.legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  margin: 12px 0;
+}
+.dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 5px;
+}
+.status {
+  padding: 14px 0;
+  font-size: 14px;
+}
+.stats {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+.stats b {
+  display: block;
+  font-size: 23px;
+}
+.stats div {
+  font-size: 12px;
+}
+.atlas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.atlas img {
+  width: 100%;
+  height: 240px;
+  background: black;
+  object-fit: contain;
+}
+.atlas figcaption {
+  font-size: 11px;
+}
+.atlas button {
+  border: 0;
+  padding: 0;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.legendbar {
+  height: 10px;
+  background: linear-gradient(90deg, #3b4cc0, #dddcdc, #b40426);
+  margin-top: 10px;
+}
+.ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+details {
+  margin: 18px 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #e9ede4;
+  padding: 20px;
+  font:
+    12px/1.7 ui-monospace,
+    monospace;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+td,
+th {
+  padding: 9px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+td.formula {
+  min-width: 250px;
+}
+.plot {
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+}
+.wide {
+  overflow: auto;
+}
+.profile {
+  height: 250px;
+  background: white;
+}
+.support-label {
+  color: #8f631c;
+}
+.formula {
+  font-family: ui-monospace, monospace;
+}
+.resource {
+  margin: 15px 0;
+}
+.resource small {
+  display: block;
+}
+#hover {
+  min-height: 25px;
+}
+.print-image {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 850px) {
+  header,
+  main,
+  footer {
+    padding: 25px 20px;
+  }
+  .grid2,
+  .grid3 {
+    grid-template-columns: 1fr;
+  }
+  .atlas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  figure img,
+  .stage,
+  #mapView {
+    height: 340px;
+  }
+  h1 {
+    letter-spacing: -1px;
+  }
+  .metrics {
+    gap: 20px;
+  }
+}

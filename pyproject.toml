@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "csi-maize-methods"
+version = "0.1.0"
+description = "Reproducible circular maize phenotyping and leaf-scale architectural experiments"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [
+  {name = "Vlatko Galic"},
+  {name = "Maja Mazur"},
+]
+dependencies = [
+  "numpy>=1.26,<3", "scipy>=1.13,<2", "Pillow>=10,<14",
+  "openpyxl>=3.1,<4", "matplotlib>=3.8,<4", "opencv-python>=4.10,<6",
+  "scikit-image>=0.24,<0.27", "scikit-learn>=1.5,<2", "threadpoolctl>=3.5,<4",
+  "jsonschema>=4.20,<5",
+]
+
+[project.optional-dependencies]
+geometry = ["torch>=2.8,<2.9"]
+learning = [
+  "torch>=2.8,<2.9", "torchvision>=0.23,<0.24", "transformers==4.57.1",
+  "huggingface-hub>=0.36,<1", "safetensors>=0.6,<1", "ultralytics==8.4.187",
+  "einops>=0.8,<1", "omegaconf>=2.3,<3",
+  "lap==0.5.12",
+]
+test = ["pytest>=8,<10", "build>=1.2,<2", "ruff>=0.12,<1"]
+
+[project.scripts]
+csi-maize = "csi_maize.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"csi_maize" = ["web/*.html", "web/*.css", "web/*.js", "assets_manifest.json"]
+"csi_maize._methods" = ["*.json", "*.html", "*.js", "*.css"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100

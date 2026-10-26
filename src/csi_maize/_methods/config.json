@@ -1,0 +1,12 @@
+{
+  "reference_table": "research_audit/reference_master.csv",
+  "source_folders": ["CSI-maize_podaci/IMAGES", "Stress1_13das", "Stress2_19das"],
+  "identity_mapping": "prototype/identity_mapping.csv",
+  "allowed_views_per_camera": [30, 40],
+  "feature_views_per_camera": 4,
+  "thumbnail_width": 640,
+  "ridge_penalty": 10.0,
+  "targets": ["ojip__Fv/Fm", "ojip__Pi_Abs", "nir__NDVI"],
+  "spectral_sources": ["NIR_P6_transmitance.xlsx", "UVIS_P6_transmitance.xlsx"],
+  "exclude_spectral_keys": [["S", "2", "Mo17", "4"], ["P", "4", "Os6251/15", "4"]]
+}

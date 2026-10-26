@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "default_required": [
+    "sam2.1-hiera-small",
+    "yolo26n-seg",
+    "yolo26s-seg",
+    "yolo26n-amp-check"
+  ],
+  "profile_additions": {
+    "learning": [
+      "dinov2-small"
+    ]
+  },
+  "scope": "Only pretrained assets required by the released publication and optional learning profiles. Historical DA3 experiments are excluded.",
+  "integrity_policy": "Exact per-file SHA256 and size are checked before any model loader receives a file. Downloads require explicit permission and pinned official upstream URLs.",
+  "models": {
+    "sam2.1-hiera-small": {
+      "provider": "huggingface",
+      "model": "facebook/sam2.1-hiera-small",
+      "revision": "ee5bba1d82bb8749febdf90f45e84b687142ba03",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/facebook/sam2.1-hiera-small/blob/ee5bba1d82bb8749febdf90f45e84b687142ba03/README.md",
+      "upstream_license_url": "https://github.com/facebookresearch/sam2/blob/main/LICENSE",
+      "scope": "Frozen foreground segmentation for operational masks; not annotated anatomical truth.",
+      "notices": [
+        "Upstream authors retain ownership of pretrained models and their documentation. Preserve applicable Apache-2.0 licenses and notices when redistributing upstream artifacts."
+      ],
+      "files": [
+        {
+          "cache_path": "sam2.1-hiera-small/config.json",
+          "workspace_path": "prototype/research_v2/models/sam2.1-hiera-small/config.json",
+          "bytes": 5698,
+          "sha256": "97ff9f65b76d107acda4247885f0a5555d0048850ae3c5f97183df289aaecde9",
+          "url": "https://huggingface.co/facebook/sam2.1-hiera-small/resolve/ee5bba1d82bb8749febdf90f45e84b687142ba03/config.json"
+        },
+        {
+          "cache_path": "sam2.1-hiera-small/model.safetensors",
+          "workspace_path": "prototype/research_v2/models/sam2.1-hiera-small/model.safetensors",
+          "bytes": 184305280,
+          "sha256": "0a4067b11ce1e23d5229203f11c718a823060d15a4b23fa2372a7d4b77cbbc60",
+          "url": "https://huggingface.co/facebook/sam2.1-hiera-small/resolve/ee5bba1d82bb8749febdf90f45e84b687142ba03/model.safetensors"
+        },
+        {
+          "cache_path": "sam2.1-hiera-small/preprocessor_config.json",
+          "workspace_path": "prototype/research_v2/models/sam2.1-hiera-small/preprocessor_config.json",
+          "bytes": 683,
+          "sha256": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d",
+          "url": "https://huggingface.co/facebook/sam2.1-hiera-small/resolve/ee5bba1d82bb8749febdf90f45e84b687142ba03/preprocessor_config.json"
+        },
+        {
+          "cache_path": "sam2.1-hiera-small/processor_config.json",
+          "workspace_path": "prototype/research_v2/models/sam2.1-hiera-small/processor_config.json",
+          "bytes": 95,
+          "sha256": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d",
+          "url": "https://huggingface.co/facebook/sam2.1-hiera-small/resolve/ee5bba1d82bb8749febdf90f45e84b687142ba03/processor_config.json"
+        },
+        {
+          "cache_path": "sam2.1-hiera-small/README.md",
+          "workspace_path": "prototype/research_v2/models/sam2.1-hiera-small/README.md",
+          "bytes": 19974,
+          "sha256": "6ec2d54879e41ad876d8cded0d641e8bc6ab74d5e095a73afc3f8406372ee6e9",
+          "url": "https://huggingface.co/facebook/sam2.1-hiera-small/resolve/ee5bba1d82bb8749febdf90f45e84b687142ba03/README.md"
+        }
+      ]
+    },
+    "dinov2-small": {
+      "provider": "huggingface",
+      "model": "facebook/dinov2-small",
+      "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+      "license": "Apache-2.0",
+      "license_source": "https://huggingface.co/facebook/dinov2-small/blob/ed25f3a31f01632728cabb09d1542f84ab7b0056/README.md",
+      "upstream_license_url": "https://github.com/facebookresearch/dinov2/blob/main/LICENSE",
+      "scope": "Optional frozen image features for the earlier phenotype-learning comparisons.",
+      "notices": [
+        "Upstream authors retain ownership of pretrained models and their documentation. Preserve applicable Apache-2.0 licenses and notices when redistributing upstream artifacts."
+      ],
+      "files": [
+        {
+          "cache_path": "dinov2-small/config.json",
+          "workspace_path": "prototype/research_v2/models/dinov2-small/config.json",
+          "bytes": 547,
+          "sha256": "1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d",
+          "url": "https://huggingface.co/facebook/dinov2-small/resolve/ed25f3a31f01632728cabb09d1542f84ab7b0056/config.json"
+        },
+        {
+          "cache_path": "dinov2-small/model.safetensors",
+          "workspace_path": "prototype/research_v2/models/dinov2-small/model.safetensors",
+          "bytes": 88249960,
+          "sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+          "url": "https://huggingface.co/facebook/dinov2-small/resolve/ed25f3a31f01632728cabb09d1542f84ab7b0056/model.safetensors"
+        },
+        {
+          "cache_path": "dinov2-small/preprocessor_config.json",
+          "workspace_path": "prototype/research_v2/models/dinov2-small/preprocessor_config.json",
+          "bytes": 436,
+          "sha256": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828",
+          "url": "https://huggingface.co/facebook/dinov2-small/resolve/ed25f3a31f01632728cabb09d1542f84ab7b0056/preprocessor_config.json"
+        },
+        {
+          "cache_path": "dinov2-small/README.md",
+          "workspace_path": "prototype/research_v2/models/dinov2-small/README.md",
+          "bytes": 3033,
+          "sha256": "4c20dca454a8e5c670e8de5c7e6040f512aeca5438516f7623eedc4e3b00599c",
+          "url": "https://huggingface.co/facebook/dinov2-small/resolve/ed25f3a31f01632728cabb09d1542f84ab7b0056/README.md"
+        }
+      ]
+    },
+    "yolo26n-seg": {
+      "provider": "github_release",
+      "model": "ultralytics/yolo26n-seg",
+      "repository": "ultralytics/assets",
+      "revision": "v8.4.0",
+      "license": "AGPL-3.0",
+      "license_source": "https://github.com/ultralytics/assets/blob/v8.4.0/LICENSE",
+      "licensing_options": "https://www.ultralytics.com/license",
+      "runtime_package": "ultralytics==8.4.187",
+      "scope": "Pretrained generic segmentation initialization for explicitly weak RGB/NoIR teacher training. Trained checkpoints have separate provenance.",
+      "notices": [
+        "Ultralytics assets are third-party pretrained weights. Preserve upstream attribution and AGPL-3.0 terms, or use an applicable separate upstream license. These assets are not relicensed as original project material."
+      ],
+      "files": [
+        {
+          "cache_path": "yolo26n-seg.pt",
+          "workspace_path": "prototype/research_v2/yolo26n-seg.pt",
+          "bytes": 6719965,
+          "sha256": "361fbfabab285c3237700b6bb91d7ecfa602cd945fffda8dbe1242829b71e73f",
+          "url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n-seg.pt",
+          "fallback_inputs": [
+            "prototype/research_v2/yolo26n-seg.pt",
+            "prototype/research_v2/outputs/multimodal_leaf/2026-10-24/pretrained/yolo26n-seg.pt"
+          ]
+        }
+      ]
+    },
+    "yolo26s-seg": {
+      "provider": "github_release",
+      "model": "ultralytics/yolo26s-seg",
+      "repository": "ultralytics/assets",
+      "revision": "v8.4.0",
+      "license": "AGPL-3.0",
+      "license_source": "https://github.com/ultralytics/assets/blob/v8.4.0/LICENSE",
+      "licensing_options": "https://www.ultralytics.com/license",
+      "runtime_package": "ultralytics==8.4.187",
+      "scope": "Pretrained generic segmentation initialization for explicitly weak RGB/NoIR teacher training. Trained checkpoints have separate provenance.",
+      "notices": [
+        "Ultralytics assets are third-party pretrained weights. Preserve upstream attribution and AGPL-3.0 terms, or use an applicable separate upstream license. These assets are not relicensed as original project material."
+      ],
+      "files": [
+        {
+          "cache_path": "yolo26s-seg.pt",
+          "workspace_path": "prototype/research_v2/yolo26s-seg.pt",
+          "bytes": 23467933,
+          "sha256": "3da1d83e31caec96f9300eb4064f4f62882c133c7c264d63dfe61a7c197837a4",
+          "url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26s-seg.pt",
+          "fallback_inputs": [
+            "prototype/research_v2/yolo26s-seg.pt",
+            "prototype/research_v2/outputs/multimodal_leaf/2026-10-24/pretrained/yolo26s-seg.pt"
+          ]
+        }
+      ]
+    },
+    "yolo26n-amp-check": {
+      "provider": "github_release",
+      "model": "ultralytics/yolo26n",
+      "repository": "ultralytics/assets",
+      "revision": "v8.4.0",
+      "license": "AGPL-3.0",
+      "license_source": "https://github.com/ultralytics/assets/blob/v8.4.0/LICENSE",
+      "licensing_options": "https://www.ultralytics.com/license",
+      "runtime_package": "ultralytics==8.4.187",
+      "scope": "Pinned detection checkpoint used only by the upstream Automatic Mixed Precision self-check. It is not the trained segmentation model and does not change the declared amp=True recipe.",
+      "notices": [
+        "Ultralytics pretrained checkpoint; retain upstream attribution and applicable AGPL-3.0 terms or a separate upstream license. No model binary is redistributed with the project source."
+      ],
+      "files": [
+        {
+          "cache_path": "yolo26n.pt",
+          "workspace_path": "prototype/research_v2/yolo26n.pt",
+          "bytes": 5544453,
+          "sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+          "url": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt",
+          "fallback_inputs": [
+            "prototype/weights/yolo26n.pt",
+            "prototype/research_v2/yolo26n.pt"
+          ]
+        }
+      ]
+    }
+  }
+}

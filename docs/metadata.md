@@ -1,0 +1,24 @@
+# Workbook metadata and identity joins
+
+`csi_maize.metadata.build_reference_tables(workspace)` rebuilds the reference index from original workbooks copied into the workspace root. It returns counts and writes only derived audit/metadata files. It does not change workbook cells, infer sample identity from row order, or join biochemical or biomass assays whose sampling relationship is unverified.
+
+The minimum input set contains `Genotype_list.xlsx`, the three OJIP/UVIS/NIR `*_P6_computed_data.xlsx` files and the six native UVIS/NIR absorbance, transmitance and scope workbooks. The original spelling `transmitance` is retained. A full study workspace also supplies the OJIP source workbook, LAB workbooks and biomass workbook; all sheets of every top-level workbook are exported without changing their values. The genotype list has two columns and no header: full genotype name followed by its acquisition code.
+
+The join key is `(treatment, measurement, genotype, replicate)`. Measurement and replicate must be positive integers. Genotype codes are resolved through the supplied lookup. Each primary table must have the same unique key set as OJIP. Duplicate keys are rejected even if their measurements agree, and partial keys, unknown genotypes, Excel error cells, missing measurements and nonnumeric/nonfinite measurements are rejected. No rows are silently removed by an inner join. Output order is treatment, measurement, genotype-lookup order and replicate; source-table row permutations do not change the joined measurements.
+
+UVIS and NIR retain separate native wavelength grids. Each spectral workbook must contain exactly 256 strictly increasing finite wavelength headers, with matching grids across absorbance, transmitance and scope within one instrument. The instruments are never resampled into one fabricated spectrum. UVIS absorbance/transmittance flags use `abs(A + log10(T)) > 1e-5`; nonpositive transmittance is flagged separately. Flags preserve the four-part key, native wavelength, unmodified values and source transmitance cell. The `error` value is JSON `null` when the logarithm is undefined, with an explicit `reason`. No source value is corrected automatically.
+
+Image folders are taken only from `prototype/config.json` → `source_folders`. Paths must stay within the workspace or an explicit `input_bindings.json` registration. Session names matching `capture_session_<treatment><measurement>_<genotype-code>-<replicate>` produce candidate four-part identities; duplicate session identities are rejected. Timestamp-only names remain unresolved. All JPEG containers in each configured session are verified, camera view indices are recorded and EXIF date/exposure/ISO are retained when available. A complete status requires matching paired counts, an allowed view count and every container passing; container checks are not full image-quality assessment or scientific calibration.
+
+Generated files:
+
+- `research_audit/reference_master.csv`: four identifiers, verbatim prefixed computed variables and source-linked image availability.
+- `research_audit/computed_variable_dictionary.csv`: original workbook/sheet/Excel-column/header and unresolved definition/unit status.
+- `research_audit/tables/*.csv`: all original workbook sheets, including unjoined LAB/biomass tables.
+- `research_audit/uvis_consistency_issues.json`, `spectral_consistency.csv` and `reference_key_alignment.csv`: numerical/key checks.
+- `research_audit/session_manifest.csv` and `image_manifest.csv`: newly generated source inventories.
+- `research_audit/reference_workbook_sha256.csv` and `metadata/reference_sources.json`: relative workbook names, byte counts, SHA256 hashes, builder/environment/config binding and counts. Absolute source locations are not copied into this metadata.
+
+The October 2026 source comparison reproduced all 360 rows and all 65 identifier/scientific columns of the existing reference table exactly. A canonical UTF-8 CSV of those columns has SHA256 `b2f89d3ad3f283595309cf9944add52a35b9541a7f6680e88089408fc545f856` for both builds. The 73-row variable dictionary was byte-identical. All 255 UVIS flags matched the original key, wavelength, cell and finite error values; one undefined error is now strict JSON `null` rather than `Infinity`. Regenerated image availability matched after normalizing path separators. The configured folders contain 90 sessions; one historical root-level unresolved pilot is intentionally outside the folder allowlist and does not change the 360-row reference join.
+
+The synthetic Excel tests cover row permutations, duplicate/missing/partial keys, conflicting genotype codes, Excel errors, native wavelength integrity, strict JSON flags, assay non-linkage, generated session identity, damaged JPEGs and registered source bindings. Python dependencies for this stage are openpyxl and Pillow in addition to the standard library.

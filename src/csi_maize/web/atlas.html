@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CSI-MAIZE | Same plant, six recorded channels</title>
+    <style>
+      __ATLAS_CSS__
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="eyebrow">CSI-MAIZE · OBSERVATION LAYER · 26 OCTOBER 2026</div>
+      <h1>
+        The same plant.<br />Two cameras.<br />Spatial evidence you can inspect.
+      </h1>
+      <p class="lead">
+        Overlay segmented RGB and longpass NoIR projections, inspect where they
+        disagree, and explore 27 image-based indices from six recorded channels.
+      </p>
+      <nav>
+        <a href="#explorer">Projection overlap</a
+        ><a href="#atlas">27-map atlas</a
+        ><a href="#coverage">Archive coverage</a
+        ><a href="#methods">Materials and methods</a
+        ><a href="#definitions">Formula catalogue</a>
+      </nav>
+      <div class="metrics" id="metrics"></div>
+      <p class="notice">
+        These are processed camera-DN feature maps. The registration and leaf
+        matches are explicit hypotheses. Spectral calibration, corresponding
+        tissue and chlorophyll prediction have not been established.
+      </p>
+    </header>
+    <main>
+      <section id="explorer">
+        <div class="eyebrow">A WHOLE-PLANT REFERENCE GRID</div>
+        <h2>Compare the projections before interpreting a ratio</h2>
+        <div class="controls">
+          <label>Acquisition<select id="session"></select></label
+          ><label>Recorded view<select id="view"></select></label
+          ><button id="previous">Previous view</button
+          ><button id="next">Next view</button>
+        </div>
+        <p class="status" id="identity"></p>
+        <p class="small" id="phase"></p>
+        <div class="grid3">
+          <figure>
+            <img id="rgb" alt="Original segmented RGB whole plant" />
+            <figcaption>RGB, cropped from its reference grid</figcaption>
+          </figure>
+          <figure>
+            <img
+              id="noir_native"
+              alt="Original segmented NoIR plant in its own camera coordinates"
+            />
+            <figcaption>NoIR, original camera grid and its own crop</figcaption>
+          </figure>
+          <figure>
+            <img
+              id="noir_registered"
+              alt="NoIR whole-plant projection sampled into RGB coordinates"
+            />
+            <figcaption>
+              NoIR, registered into the RGB reference grid
+            </figcaption>
+          </figure>
+        </div>
+        <div class="grid2">
+          <figure>
+            <div class="stage">
+              <canvas
+                id="overlay"
+                aria-label="Interactive registered projection overlay"
+              ></canvas>
+            </div>
+            <figcaption id="overlaycaption">
+              Registered projection blend
+            </figcaption>
+            <div class="controls">
+              <label
+                >Display<select id="mode">
+                  <option value="blend">RGB + NoIR blend</option>
+                  <option value="wipe">Moveable RGB / NoIR wipe</option>
+                  <option value="overlap">Silhouette agreement</option>
+                  <option value="support">
+                    Cross-camera calculation support
+                  </option>
+                </select></label
+              ><label
+                >NoIR opacity / wipe position<input
+                  id="alpha"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="50"
+              /></label>
+            </div>
+            <div class="legend">
+              <span
+                ><i class="dot" style="background: #db4db5"></i>RGB only</span
+              ><span
+                ><i class="dot" style="background: #2bc4d9"></i>NoIR only</span
+              ><span
+                ><i class="dot" style="background: #ebebeb"></i>Silhouette
+                overlap</span
+              ><span
+                ><i class="dot" style="background: #e9bc49"></i>Accepted
+                candidate common interior</span
+              >
+            </div>
+          </figure>
+          <figure>
+            <img id="mapView" alt="Selected spatial camera-DN feature map" />
+            <figcaption id="mapcaption"></figcaption>
+            <label>Spatial descriptor<select id="index"></select></label>
+            <div class="legendbar"></div>
+            <div class="ends">
+              <span id="lo"></span><span id="mid"></span><span id="hi"></span>
+            </div>
+            <p class="small">
+              Black is missing or excluded. Scales remain fixed between views
+              for each definition. Values outside a display scale remain in the
+              numerical export.
+            </p>
+            <p class="formula small" id="formula"></p>
+          </figure>
+        </div>
+        <div class="stats" id="stats"></div>
+        <p class="small" id="qualification"></p>
+        <h3>The complete rotation retains its difficult views</h3>
+        <div class="profile">
+          <canvas
+            id="profile"
+            aria-label="Coverage through all forty nominal views"
+          ></canvas>
+        </div>
+        <p class="small">
+          Gold: accepted cross-camera support pixels. Teal: joint-six-channel
+          valid pixels. This chart uses all 40 indexed views; the displayed
+          images are the four fixed indices and any additional
+          availability-selected view.
+        </p>
+        <details>
+          <summary>
+            Source files, transform, exposure settings and support counts
+          </summary>
+          <pre id="provenance"></pre>
+        </details>
+      </section>
+      <section id="atlas">
+        <div class="eyebrow">
+          SIMPLE RATIOS THROUGH MULTICHANNEL DESCRIPTORS
+        </div>
+        <h2>27 formulas, one inspectable plant</h2>
+        <p>
+          Fifteen pairwise normalized differences, six published RGB formula
+          families and six exploratory multichannel descriptors. Each tile
+          states its own range and valid pixel count. Click a tile to inspect it
+          above.
+        </p>
+        <p class="small">
+          RGB-only, NoIR-only and cross-camera formulas use different qualified
+          regions. Their spatial patterns are therefore conditional on different
+          support. More formulas do not create more independent spectral bands.
+        </p>
+        <div class="atlas" id="tiles"></div>
+      </section>
+      <section id="coverage">
+        <div class="eyebrow">EVERY NOMINAL CAMERA PAIR</div>
+        <h2>Availability is a result</h2>
+        <p id="coverageText"></p>
+        <p>
+          When NoIR green remains at the dark floor, six-channel formulas cannot
+          recover the missing information. Two- and four-channel descriptors can
+          remain available because they do not require every channel.
+        </p>
+        <img
+          class="plot"
+          src="__FIG_04_feature_availability__"
+          alt="Availability of all27definitions across41acquisitions, quantified as qualified views out of40"
+        />
+        <details>
+          <summary>
+            Acquisition-balanced coverage and descriptive medians
+          </summary>
+          <div class="wide">
+            <table>
+              <thead>
+                <tr>
+                  <th>Definition</th>
+                  <th>Qualified views / 1640</th>
+                  <th>Acquisitions / 41</th>
+                  <th>Median of acquisition summaries</th>
+                </tr>
+              </thead>
+              <tbody id="coverageRows"></tbody>
+            </table>
+          </div>
+        </details>
+      </section>
+      <section id="figures">
+        <div class="eyebrow">EXPORTABLE SCIENTIFIC PANELS</div>
+        <h2>Alignment, maps and angular evidence</h2>
+        <details>
+          <summary>Four fixed views of one acquisition</summary>
+          <img
+            class="print-image"
+            src="__FIG_01_same_plant_overlap__"
+            alt="Four fixed nominal views comparing RGB, registeredNoIR, projectionblend and silhouetteagreement"
+          />
+        </details>
+        <details>
+          <summary>All15pairwise normalized differences</summary>
+          <img
+            class="print-image"
+            src="__FIG_02_fifteen_channel_pair_maps__"
+            alt="Fifteen pairwise spatial normalized-difference maps for one availability-selected view"
+          />
+        </details>
+        <details>
+          <summary>RGB and multichannel formula families</summary>
+          <img
+            class="print-image"
+            src="__FIG_03_rgb_and_multichannel_maps__"
+            alt="SixRGB and sixmultichannel maps, with per-panel ranges and validpixelcounts"
+          />
+        </details>
+      </section>
+      <section id="methods">
+        <div class="eyebrow">MATERIALS AND METHODS</div>
+        <h2>The overlap and calculation are part of the method</h2>
+        <p>
+          We paired acquisition and filename index, retained the frozen affine
+          transform, and sampled NoIR into RGB coordinates. RGB-only maps use
+          eroded RGB plant support. NoIR-only maps use sampled eroded NoIR
+          support. Cross-camera maps use the union of accepted candidate leaf
+          common interiors. Whole-plant silhouette agreement is displayed
+          separately.
+        </p>
+        <p>
+          We guarded dark and clipped processing-grid channels before affine
+          interpolation and required all contributing NoIR samples to pass. We
+          calculated nonlinear NoIR indices after sampling the channels; this
+          differs from warping a native-camera ratio. Each formula retains its
+          own validity mask. We did not select registration transforms using the
+          resulting index values.
+        </p>
+        <p>
+          We retain core registration, signal exclusions, support definitions
+          and replication policy in the main paper. The complete formula table,
+          all-acquisition coverage and exhaustive atlases accompany the
+          supplementary methods and data repository.
+        </p>
+        <details>
+          <summary>
+            Read the complete investigation and manuscript-ready methods
+          </summary>
+          <pre>__INVESTIGATION__</pre>
+        </details>
+        <button id="download">Download formatted investigation text</button>
+      </section>
+      <section id="definitions">
+        <h2>Formula catalogue and interpretation</h2>
+        <p class="small">
+          R,G,B denote recorded RGB DN; NoIR channels retain their camera names.
+          Σ denotes the sum within a camera and GM its geometric mean. The six
+          multichannel formulas are exploratory descriptors, not established
+          physiological indices. The15pairwise differences are redundant: at a
+          positive six-channel pixel they contain at most five independent
+          relative coordinates.
+        </p>
+        <div class="wide">
+          <table>
+            <thead>
+              <tr>
+                <th>Definition</th>
+                <th>Formula</th>
+                <th>Support</th>
+                <th>Fixed display range</th>
+              </tr>
+            </thead>
+            <tbody id="definitionsRows"></tbody>
+          </table>
+        </div>
+        <div id="references"></div>
+      </section>
+    </main>
+    <footer>
+      <p>
+        Vlatko Galic and Maja Mazur · Agricultural Institute Osijek<br />CSI-MAIZE
+        · Supporting observations from paired camera projections.
+      </p>
+      <p class="small">
+        The report is portable and uses no external scripts or image requests.
+        Floating-point spatial arrays, masks, source hashes and reproducible
+        code accompany the evidence bundle.
+      </p>
+    </footer>
+    <script id="atlas-data" type="application/json">
+      __PAYLOAD__
+    </script>
+    <script>
+      __ATLAS_JS__;
+    </script>
+  </body>
+</html>

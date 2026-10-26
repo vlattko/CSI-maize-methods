@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "Please cite this software and the associated dataset when using the methods."
+type: software
+title: "CSI-MAIZE: circular phenotyping and leaf-scale architectural experiments"
+version: 0.1.0
+authors:
+  - family-names: Galic
+    given-names: Vlatko
+    affiliation: Agricultural Institute Osijek
+  - family-names: Mazur
+    given-names: Maja
+    affiliation: Agricultural Institute Osijek
+repository-code: "https://github.com/vlattko/CSI-maize-methods"
+license: MIT
+abstract: >-
+  Reproducible methods for circular maize imaging, source-assisted leaf geometry,
+  known-answer inverse recovery, fixed-receiver architectural interventions,
+  camera correspondence and spatial image descriptors. Anatomical, longitudinal
+  and physiological validation boundaries are retained explicitly.
