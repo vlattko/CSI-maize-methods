@@ -301,7 +301,10 @@ class ReportTests(unittest.TestCase):
             self.assertIsNotNone(match)
             self.assertEqual(html.unescape(match.group(1)), content)
             self.assertIn('loading="lazy"', text)
-            self.assertIn('sandbox="allow-scripts allow-downloads"', text)
+            self.assertIn(
+                'sandbox="allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox"',
+                text,
+            )
 
     def test_unsafe_atlas_resources_or_private_paths_are_not_embedded(self):
         build, _ = self.api()
@@ -324,14 +327,20 @@ class ReportTests(unittest.TestCase):
     def test_atlas_typography_preserves_application_json_exactly(self):
         from csi_maize.report import format_atlas_html
 
-        payload = """{"text":"ctx.font='13px sans-serif'","values":[0.1,null,2]}"""
+        payload = (
+            """{"text":"ctx.font='13px sans-serif'","html":"</footer>","values":[0.1,null,2]}"""
+        )
         source = (
-            '<html><head><style>body{background:beige}</style></head><body><script type="application/json">'
+            '<html><head><style>body{background:beige}</style></head><body><footer></footer><script id="atlas-data" type="application/json">'
             + payload
             + """</script><script>ctx.font='13px sans-serif';</script></body></html>"""
         )
         formatted = format_atlas_html(source)
-        self.assertIn('<script type="application/json">' + payload + "</script>", formatted)
+        self.assertIn(
+            '<script id="atlas-data" type="application/json">' + payload + "</script>", formatted
+        )
+        self.assertEqual(format_atlas_html(formatted), formatted)
+        self.assertEqual(formatted.count('id="atlas-external-navigation"'), 1)
         self.assertIn("--paper: #ffffff", formatted)
         self.assertIn("Times New Roman", formatted)
 

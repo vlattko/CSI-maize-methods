@@ -350,7 +350,34 @@ def format_atlas_html(source: str) -> str:
         )
         return opening + code + closing
 
-    return re.sub(r"(<script\b[^>]*>)(.*?)(</script>)", drawing_font, source, flags=re.S | re.I)
+    source = re.sub(r"(<script\b[^>]*>)(.*?)(</script>)", drawing_font, source, flags=re.S | re.I)
+    if 'id="atlas-data"' in source:
+        availability = '<p id="data-availability">We provide the analysis code at <a href="https://github.com/vlattko/CSI-maize-methods" target="_blank" rel="noopener noreferrer">GitHub</a>. Data and reference outputs will be made available via Zenodo after publication.</p>'
+        # Edit markup separately, preserving every JSON/script block verbatim.
+        pieces = re.split(r"(<script\b[^>]*>.*?</script>)", source, flags=re.S | re.I)
+        if not any(
+            'id="data-availability"' in piece for index, piece in enumerate(pieces) if not index % 2
+        ):
+            pieces = [
+                piece if index % 2 else piece.replace("</footer>", availability + "</footer>")
+                for index, piece in enumerate(pieces)
+            ]
+        source = "".join(pieces)
+        # User-activated citations open outside the embedded atlas, without an opener.
+        navigation = (
+            '<script id="atlas-external-navigation">'
+            + (WEB / "atlas-bridge.js").read_text(encoding="utf-8")
+            + "</script>"
+        )
+        before, closing, after = source.rpartition("</body>")
+        has_navigation = any(
+            'id="atlas-external-navigation"' in piece.split(">", 1)[0]
+            for index, piece in enumerate(pieces)
+            if index % 2
+        )
+        if closing and not has_navigation:
+            source = before + navigation + closing + after
+    return source
 
 
 def _atlas(outputs: Path):
@@ -392,7 +419,7 @@ def _atlas(outputs: Path):
             "The generated atlas did not pass the self-contained public-resource check; regenerate it with the public template.",
         )
     return (
-        '<iframe title="Supporting RGB and NoIR spatial atlas" loading="lazy" sandbox="allow-scripts allow-downloads" srcdoc="'
+        '<iframe title="Supporting RGB and NoIR spatial atlas" loading="lazy" sandbox="allow-scripts allow-downloads allow-popups allow-popups-to-escape-sandbox" srcdoc="'
         + html.escape(source, quote=True)
         + '"></iframe>'
     )

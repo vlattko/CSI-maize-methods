@@ -59,6 +59,8 @@ jobs:
           python -m compileall -q src
           node --check src/csi_maize/web/report.js
           node --check src/csi_maize/web/atlas.js
+          node --check src/csi_maize/web/atlas-bridge.js
+          node tests/web_behavior.cjs
       - name: Run all tests and record canonical numerical counts
         run: python -m pytest tests -q --junitxml=runs/ci-pytest.xml
       - name: Build and inspect installable distributions
@@ -75,7 +77,8 @@ jobs:
               required = ('csi_maize/assets_manifest.json', 'csi_maize/ultralytics_offline.py',
                           'csi_maize/web/report.html', 'csi_maize/web/report.css',
                           'csi_maize/web/report.js', 'csi_maize/web/atlas.html',
-                          'csi_maize/web/atlas.css', 'csi_maize/web/atlas.js')
+                          'csi_maize/web/atlas.css', 'csi_maize/web/atlas.js',
+                          'csi_maize/web/atlas-bridge.js')
               assert all(name in names for name in required)
               for name in ('LICENSE', 'THIRD_PARTY_NOTICES.md'):
                   assert any(path.endswith('.dist-info/licenses/' + name) for path in names)
@@ -87,6 +90,8 @@ jobs:
               names = archive.getnames()
               assert any(name.endswith('/LICENSE') for name in names)
               assert any(name.endswith('/THIRD_PARTY_NOTICES.md') for name in names)
+              for required in ('requirements/cpu-py312.txt', 'requirements/cuda128-py312-windows.txt', 'docs/reproduction.md', 'tests/web_behavior.cjs'):
+                  assert any(name.endswith('/' + required) for name in names)
           print('Wheel assets, source notices and PEP 639 metadata verified')
           PY
       - name: Install the wheel and execute its controlled example

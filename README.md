@@ -40,7 +40,7 @@ csi-maize verify --run runs/publication
 
 Install the `learning` extra and the appropriate CUDA PyTorch build before this route. The complete raw workflow requires an NVIDIA CUDA device; the controlled example runs on CPU. [Reproduction instructions](docs/reproduction.md) cover CPU/CUDA environments, offline execution, individual stages, interruption/resume and the expected input layout. Asset downloads occur only through the explicit preparation command; analysis stages reject outbound network access.
 
-Each run uses a separate workspace. Its manifest records source code, configuration, raw inputs, dependency versions, checkpoints and output hashes. Resume verifies these records before reusing results. Source folders are registered separately from generated outputs.
+Each run uses a separate workspace. Its manifest records source code, configuration, raw inputs, dependency versions, checkpoints and output hashes. Resume verifies these records before reusing results. Source folders are registered separately from generated outputs. Fresh inverse fits need not be bit-identical, even with the same inputs and recorded package versions. Retain the fitted parameters and manifest when referring to a particular virtual experiment.
 
 ## Methods and verification
 
@@ -50,8 +50,11 @@ Each run uses a separate workspace. Its manifest records source code, configurat
 - [Validation and release evidence](docs/validation.md)
 - [Third-party software and model licences](THIRD_PARTY_NOTICES.md)
 
+JavaScript interaction checks use Node.js 22 and its standard library.
+
 ```sh
 python -m pytest tests -q
+node tests/web_behavior.cjs
 python -m build
 ```
 

@@ -5,12 +5,12 @@ const evidence = JSON.parse(
   document.getElementById("architecture-data").textContent,
 );
 const palette = [
-  "#efbb4c",
-  "#4ecdb1",
-  "#f18b9c",
-  "#99b6f1",
-  "#c598e2",
-  "#739873",
+  "#9d6a00",
+  "#008573",
+  "#b94268",
+  "#3560a8",
+  "#82459f",
+  "#486e48",
 ];
 
 function renderModel(mesh) {
@@ -58,7 +58,7 @@ function renderModel(mesh) {
     canvas.height = Math.max(1, Math.round(rect.height * ratio));
     const context = canvas.getContext("2d");
     context.scale(ratio, ratio);
-    context.fillStyle = "#102b27";
+    context.fillStyle = "#ffffff";
     context.fillRect(0, 0, rect.width, rect.height);
     const factor = Math.min(rect.width * 0.82, rect.height * 0.83) * zoom;
     const rotated = vertices.map(([x, y, z]) => {
@@ -94,7 +94,7 @@ function renderModel(mesh) {
       context.fillStyle = palette[face.organ % palette.length];
       context.fill();
     });
-    context.fillStyle = "#b6cdc0";
+    context.fillStyle = "#53665d";
     context.font = "12px \"Times New Roman\", Times, serif";
     context.fillText(
       "Display orbit only · fitted acquisition camera remains fixed",
@@ -233,3 +233,26 @@ function renderResponses(rows) {
 
 renderModel(evidence.mesh);
 renderResponses(evidence.reposition);
+
+// Sandbox frames have an opaque origin. Export through this document instead.
+window.addEventListener("message", (event) => {
+  const frame = document.querySelector(
+    'iframe[title="Supporting RGB and NoIR spatial atlas"]',
+  );
+  const request = event.data;
+  if (
+    !frame || event.source !== frame.contentWindow ||
+    !request || request.type !== "csi-maize-investigation-export" ||
+    typeof request.text !== "string" || request.text.length > 1000000
+  ) return;
+  const url = URL.createObjectURL(
+    new Blob([request.text], {type: "text/plain;charset=utf-8"}),
+  );
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = "CSI_maize_spatial_fusion_methods.txt";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});

@@ -159,7 +159,7 @@ canvas {
 }
 #mesh-view {
   height: 560px;
-  background: #102b27;
+  background: #ffffff;
   touch-action: none;
   cursor: grab;
   border-radius: 4px;

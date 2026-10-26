@@ -31,6 +31,9 @@ learning = [
 ]
 test = ["pytest>=8,<10", "build>=1.2,<2", "ruff>=0.12,<1"]
 
+[project.urls]
+Repository = "https://github.com/vlattko/CSI-maize-methods"
+
 [project.scripts]
 csi-maize = "csi_maize.cli:main"
 

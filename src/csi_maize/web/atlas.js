@@ -322,9 +322,14 @@ if (rawAtlasData.trim().startsWith("_")) {
   $("previous").onclick = () => step(-1);
   $("next").onclick = () => step(1);
   $("download").onclick = () => {
+    const text = document.querySelector("#methods pre").textContent;
+    if (window.parent !== window) {
+      window.parent.postMessage({type: "csi-maize-investigation-export", text}, "*");
+      return;
+    }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(
-      new Blob([document.querySelector("#methods pre").textContent], {
+      new Blob([text], {
         type: "text/plain;charset=utf-8",
       }),
     );
