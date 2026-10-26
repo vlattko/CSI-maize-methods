@@ -4,7 +4,11 @@ Software verification and biological validation answer different questions. The 
 
 ## Current execution status
 
-The controlled CPU example and numerical suites have passed locally on Windows with Python 3.12. An original-data attempt exposed a junction-path integration defect, which was corrected and regression-tested. A corrected fresh run of the publication and optional learning stages is in progress. Real-image geometry fitting, weak-label training and all downstream experiments have not yet completed together in one verified run. There is no completed end-to-end original-data reproduction claim. This status must be updated from a completed run manifest, rather than inferred from historical results or a passing CPU example.
+The complete original-data workflow passed in a fresh, isolated Windows Python 3.12/CUDA 12.8 environment. All 33 stages completed, including foreground extraction, assisted fitting, weak-label training, tracking, registration, spatial descriptors, virtual interventions, known-answer tests, optional prediction models and source audits. Final verification checked 13,164 generated outputs, recorded source/configuration, pinned model assets and the original inputs. No previously derived study results were substituted for a raw stage.
+
+The numerical method sources in this release are byte-identical to the frozen run snapshot. The released presenter was checked separately against those verified results, including navigation, opaque-frame text export and preservation of embedded numerical JSON. Its post-run report rebuild leaves the original manifested report unchanged. The successful execution establishes the fixed computational protocol, not independent biological or anatomical validation.
+
+Windows and Ubuntu CI passed the source, numerical, interaction and installed-wheel checks on the public code commit [f9a5008](https://github.com/vlattko/CSI-maize-methods/actions/runs/40316119872). The local suite passed 117 pytest tests and seven subtests, plus the separate Node.js interaction checks. The controlled installed-wheel example also passed without pretrained weights or a dataset.
 
 ## Execution levels
 
@@ -52,7 +56,7 @@ The CI workflow targets Python 3.12 on Windows and Ubuntu CPU runners. The Windo
 
 `requirements/cpu-py312.txt` records the locally checked CPU environment and `requirements/cuda128-py312-windows.txt` records the Windows CUDA 12.8 scientific dependency closure. The dependency-metadata audit checked the reachable CPU/test and Windows CUDA publication/learning dependencies against the pinned files and found no missing or unsatisfied constraints. These files use regular `opencv-python`, consistently with package metadata and Ultralytics. Do not install a second headless OpenCV distribution into the same environment.
 
-The CUDA snapshot excludes unrelated document-authoring packages. A fresh installation of this lock in an isolated Python 3.12 environment passed `pip check` and completed the four-stage original-data SAM comparison workflow: workbook ingestion, indexing, verified model preparation and real-image inference. Its 109 generated outputs and original inputs passed manifest verification. This check is separate from the complete publication/learning run, which remains in progress. The version snapshots do not contain wheel hashes or pin a particular NVIDIA driver and are not a promise of bit-identical computation, including repeat inverse fits on the same machine.
+The CUDA snapshot excludes unrelated document-authoring packages. A fresh installation of this lock in an isolated Python 3.12 environment passed `pip check` and completed the four-stage original-data SAM comparison workflow: workbook ingestion, indexing, verified model preparation and real-image inference. Its 109 generated outputs and original inputs passed manifest verification. This targeted comparison check is separate from the completed 33-stage publication/learning run described above. The version snapshots do not contain wheel hashes or pin a particular NVIDIA driver and are not a promise of bit-identical computation, including repeat inverse fits on the same machine.
 
 ## Refitting and stored-model verification
 
