@@ -62,9 +62,14 @@ class VirtualExperimentTests(unittest.TestCase):
                 module.write_csv(folder / "directed_neighbour_effects.csv", edges)
                 module.write_csv(folder / "screening_decomposition.csv", states)
                 (folder / "summary.json").write_text("{}", encoding="utf-8")
+            # Materialize the producer inside the fixture workspace, as the
+            # real runner does. Hosted Windows source and Temp can use different drives.
+            producer = dest / "leaf_virtual_experiments.py"
+            producer.write_bytes(Path(module.__file__).read_bytes())
             with (
                 patch.object(module, "DEST", dest),
-                patch.object(module, "ROOT", Path(Path(__file__).anchor)),
+                patch.object(module, "ROOT", dest),
+                patch.object(module, "__file__", str(producer)),
             ):
                 module.convergence()
             result = json.loads(
