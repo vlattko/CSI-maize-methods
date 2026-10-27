@@ -2,13 +2,19 @@
 
 Software verification and biological validation answer different questions. The numerical suite checks projection, renderer coverage, depth ownership, fixed-receiver accounting, interpolation guards and reproducible execution. The controlled example supplies cameras, organ labels, foreground and projected paths; its successful fit does not validate automatic anatomical discovery.
 
-## Current execution status
+## Full cohort extension
+
+The current local suite passed 217 tests and seven subtests, covering the core package and the full-cohort research extension. The rebuilt wheel was installed outside the source tree; its 30-step controlled example completed six stages and verified 419 outputs without pretrained weights. Full-archive core ingestion and indexing separately returned 362 directories and 334 eligible acquisitions, with 39 generated outputs passing stored-output verification.
+
+The numerical full-cohort producers completed their individual stages on the original archive, including 84 prediction experiments and independent image, alignment, geometry and denominator checks. The new coordinator assembles these commands; its plan, CLI contracts, locking, ownership and conservative resume tests are separate evidence. It has not rerun the entire archive in a second independent execution. Use a distinct intake per workflow, stop surviving producers after forced parent termination, and restore recorded outputs or start fresh after partial overwrites. See [full-cohort scope](full-cohort.md).
+
+## Reference 33 stage execution
 
 The complete original-data workflow passed in a fresh, isolated Windows Python 3.12/CUDA 12.8 environment. All 33 stages completed, including foreground extraction, assisted fitting, weak-label training, tracking, registration, spatial descriptors, virtual interventions, known-answer tests, optional prediction models and source audits. Final verification checked 13,164 generated outputs, recorded source/configuration, pinned model assets and the original inputs. No previously derived study results were substituted for a raw stage.
 
-The numerical method sources in this release are byte-identical to the frozen run snapshot. The released presenter was checked separately against those verified results, including navigation, opaque-frame text export and preservation of embedded numerical JSON. Its post-run report rebuild leaves the original manifested report unchanged. The successful execution establishes the fixed computational protocol, not independent biological or anatomical validation.
+The numerical source snapshot for that reference execution remains archived with its input and output manifest. Subsequent input guards, packaging and the full-cohort extension are recorded separately; this release is not asserted to be byte-identical to that earlier source. The released presenter was checked separately against those verified results, including navigation, opaque-frame text export and preservation of embedded numerical JSON. Its post-run report rebuild leaves the original manifested report unchanged. The successful execution establishes the fixed computational protocol, not independent biological or anatomical validation.
 
-Windows and Ubuntu CI passed the source, numerical, interaction and installed-wheel checks on the public code commit [f9a5008](https://github.com/vlattko/CSI-maize-methods/actions/runs/40316119872). The local suite passed 117 pytest tests and seven subtests, plus the separate Node.js interaction checks. The controlled installed-wheel example also passed without pretrained weights or a dataset.
+Windows and Ubuntu CI passed the source, numerical, interaction and installed-wheel checks on the public code commit [f9a5008](https://github.com/vlattko/CSI-maize-methods/actions/runs/40316119872). That reference suite passed 117 pytest tests and seven subtests, plus the separate Node.js interaction checks. The controlled installed-wheel example also passed without pretrained weights or a dataset.
 
 ## Execution levels
 

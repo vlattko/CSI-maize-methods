@@ -215,7 +215,8 @@ def build_index():
             and str(entry.get("full_decode_ok", "")).lower() == "true"
             and not entry.get("container_check_error")
             and int(entry["bytes"]) == p.stat().st_size
-            for camera in ("rgb", "noir") for p in nonempty[camera]
+            for camera in ("rgb", "noir")
+            for p in nonempty[camera]
         ) and bool(nonempty["rgb"] and nonempty["noir"])
         records.append(
             {

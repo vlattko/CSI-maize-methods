@@ -25,7 +25,11 @@ csi-maize verify --run runs/example
 
 Open `runs/example/reports/CSI_maize_architecture.html`. The HTML embeds its mesh, figures and supporting atlas. It uses procedural plants with explicitly supplied foreground, organ identities, cameras and paths. It exercises the numerical pipeline; it does not stand in for a trained segmentation model or real-plant validation.
 
-## Recompute the study from its inputs
+## Full cohort and external component tests
+
+The [full-cohort protocol](experiments/full_cohort/README.md) processes all keyed acquisitions, including partial rotations, with explicit observation coverage. It includes grouped prediction controls, registered channel descriptors and known-geometry tracking and exposure tests. Its [evidence and limitations](docs/full-cohort.md) distinguish component validation from automatic anatomical reconstruction.
+
+## Recompute the source assisted study from its inputs
 
 The raw-data route requires the original images, spreadsheets and supplied observation seeds, plus the pinned model assets. The Zenodo link above will identify the archival inputs after publication, when the deposit is available. We do not substitute cached results for a raw run.
 

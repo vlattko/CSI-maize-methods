@@ -55,14 +55,14 @@ jobs:
       - name: Check source and JavaScript syntax
         run: |
           python -m ruff format --check src tests
-          python -m ruff check src tests --select E9,F63,F7,F82
+          python -m ruff check src tests experiments/full_cohort --select E9,F63,F7,F82
           python -m compileall -q src
           node --check src/csi_maize/web/report.js
           node --check src/csi_maize/web/atlas.js
           node --check src/csi_maize/web/atlas-bridge.js
           node tests/web_behavior.cjs
       - name: Run all tests and record canonical numerical counts
-        run: python -m pytest tests -q --junitxml=runs/ci-pytest.xml
+        run: python -m pytest tests experiments/full_cohort -q --junitxml=runs/ci-pytest.xml
       - name: Build and inspect installable distributions
         run: |
           python -m build
@@ -90,7 +90,7 @@ jobs:
               names = archive.getnames()
               assert any(name.endswith('/LICENSE') for name in names)
               assert any(name.endswith('/THIRD_PARTY_NOTICES.md') for name in names)
-              for required in ('requirements/cpu-py312.txt', 'requirements/cuda128-py312-windows.txt', 'docs/reproduction.md', 'tests/web_behavior.cjs'):
+              for required in ('requirements/cpu-py312.txt', 'requirements/cuda128-py312-windows.txt', 'docs/reproduction.md', 'tests/web_behavior.cjs', 'experiments/full_cohort/cohort_pipeline.py', 'experiments/full_cohort/README.md'):
                   assert any(name.endswith('/' + required) for name in names)
           print('Wheel assets, source notices and PEP 639 metadata verified')
           PY

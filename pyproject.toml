@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "csi-maize-methods"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reproducible circular maize phenotyping and leaf-scale architectural experiments"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -45,7 +45,8 @@ where = ["src"]
 "csi_maize._methods" = ["*.json", "*.html", "*.js", "*.css"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "experiments/full_cohort"]
+python_files = ["test_*.py", "*_test.py", "*_tests.py"]
 addopts = "-ra"
 
 [tool.ruff]

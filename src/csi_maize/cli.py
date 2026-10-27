@@ -56,8 +56,15 @@ def main(argv=None):
     init.add_argument("--profile", choices=["publication", "learning"], default="publication")
     init.add_argument("--device", default="auto")
     init.add_argument("--expected-acquisitions", type=int, default=41)
-    init.add_argument("--source-folder", action="append", help="Relative image source folder; repeat as needed")
-    init.add_argument("--workbook-folder", action="append", default=[], help="Additional relative workbook folder; top-level workbooks are always included")
+    init.add_argument(
+        "--source-folder", action="append", help="Relative image source folder; repeat as needed"
+    )
+    init.add_argument(
+        "--workbook-folder",
+        action="append",
+        default=[],
+        help="Additional relative workbook folder; top-level workbooks are always included",
+    )
     for name in ("run", "plan", "doctor", "assets"):
         p = commands.add_parser(name)
         p.add_argument("--config", type=Path, required=True)

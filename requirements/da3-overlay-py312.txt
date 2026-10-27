@@ -1,0 +1,18 @@
+# Observed isolated DA3 overlay. Install with --no-deps --target, never into the main environment.
+ImageIO==2.38.1
+addict==2.4.0
+colorama==0.4.6
+decorator==4.4.2
+evo==1.38.1
+imageio-ffmpeg==0.6.0
+moviepy==1.0.3
+natsort==8.4.0
+numpy==1.26.4
+opencv-python-headless==4.11.0.86
+opt-einsum-fx==0.1.4
+opt_einsum==3.4.0
+proglog==0.1.12
+python-dateutil==3.0.0
+scipy==1.15.3
+six==1.17.0
+plyfile==1.1.3

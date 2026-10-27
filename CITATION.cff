@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "Please cite this software and the associated dataset when using the methods."
 type: software
 title: "CSI-MAIZE: circular phenotyping and leaf-scale architectural experiments"
-version: 0.1.0
+version: 0.2.0
 authors:
   - family-names: Galic
     given-names: Vlatko

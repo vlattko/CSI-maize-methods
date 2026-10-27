@@ -11,7 +11,7 @@
       "dinov2-small"
     ]
   },
-  "scope": "Only pretrained assets required by the released publication and optional learning profiles. Historical DA3 experiments are excluded.",
+  "scope": "Pinned assets for the core publication and optional learning profiles. The optional full-cohort depth diagnostic has its own manifest under experiments/full_cohort/depth_assets.json.",
   "integrity_policy": "Exact per-file SHA256 and size are checked before any model loader receives a file. Downloads require explicit permission and pinned official upstream URLs.",
   "models": {
     "sam2.1-hiera-small": {

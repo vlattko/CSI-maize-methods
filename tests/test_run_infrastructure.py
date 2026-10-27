@@ -43,52 +43,68 @@ def test_refuse_nonempty_unowned_workspace(tmp_path):
 
 def test_nested_workbooks_are_copied_and_original_locations_are_fingerprinted(tmp_path):
     from csi_maize.engine import raw_hashes
-    data=tmp_path/'data';nested=data/'assays';nested.mkdir(parents=True)
-    (data/'Genotype_list.xlsx').write_bytes(b'genotypes')
-    (nested/'OJIP.xlsx').write_bytes(b'assays')
-    cfg=RunConfig(data_root=data,work_dir=tmp_path/'run',source_folders=(),workbook_folders=('assays',))
+
+    data = tmp_path / "data"
+    nested = data / "assays"
+    nested.mkdir(parents=True)
+    (data / "Genotype_list.xlsx").write_bytes(b"genotypes")
+    (nested / "OJIP.xlsx").write_bytes(b"assays")
+    cfg = RunConfig(
+        data_root=data, work_dir=tmp_path / "run", source_folders=(), workbook_folders=("assays",)
+    )
     create_workspace(cfg)
-    assert (cfg.work_dir/'OJIP.xlsx').read_bytes()==b'assays'
-    before=raw_hashes(cfg)
-    assert before['assays/OJIP.xlsx']==digest(nested/'OJIP.xlsx')
-    (nested/'OJIP.xlsx').write_bytes(b'changed assays')
-    assert raw_hashes(cfg)!=before
-    restored=RunConfig.load(cfg.work_dir/'run_config.json')
-    assert restored.workbook_folders==('assays',)
+    assert (cfg.work_dir / "OJIP.xlsx").read_bytes() == b"assays"
+    before = raw_hashes(cfg)
+    assert before["assays/OJIP.xlsx"] == digest(nested / "OJIP.xlsx")
+    (nested / "OJIP.xlsx").write_bytes(b"changed assays")
+    assert raw_hashes(cfg) != before
+    restored = RunConfig.load(cfg.work_dir / "run_config.json")
+    assert restored.workbook_folders == ("assays",)
 
 
 def test_ambiguous_workbook_basenames_rejected_before_workspace_is_created(tmp_path):
-    data=tmp_path/'data';nested=data/'assays';nested.mkdir(parents=True)
-    (data/'same.xlsx').write_bytes(b'root version')
-    (nested/'same.xlsx').write_bytes(b'nested version')
-    cfg=RunConfig(data_root=data,work_dir=tmp_path/'run',source_folders=(),workbook_folders=('assays',))
-    with pytest.raises(ValueError,match='[Dd]uplicate|[Aa]mbiguous'):
+    data = tmp_path / "data"
+    nested = data / "assays"
+    nested.mkdir(parents=True)
+    (data / "same.xlsx").write_bytes(b"root version")
+    (nested / "same.xlsx").write_bytes(b"nested version")
+    cfg = RunConfig(
+        data_root=data, work_dir=tmp_path / "run", source_folders=(), workbook_folders=("assays",)
+    )
+    with pytest.raises(ValueError, match="[Dd]uplicate|[Aa]mbiguous"):
         create_workspace(cfg)
     assert not cfg.work_dir.exists()
 
 
 def test_workbook_folder_traversal_rejected(tmp_path):
     with pytest.raises(ValueError):
-        RunConfig(data_root=tmp_path,work_dir=tmp_path/'run',workbook_folders=('../outside',))
+        RunConfig(data_root=tmp_path, work_dir=tmp_path / "run", workbook_folders=("../outside",))
 
 
 def test_case_colliding_workbooks_cannot_overwrite_each_other(tmp_path):
-    data=tmp_path/'data';nested=data/'assays';nested.mkdir(parents=True)
-    (data/'SAME.xlsx').write_bytes(b'root')
-    (nested/'same.xlsx').write_bytes(b'nested')
-    cfg=RunConfig(data_root=data,work_dir=tmp_path/'run',source_folders=(),workbook_folders=('assays',))
-    with pytest.raises(ValueError,match='[Dd]uplicate|[Aa]mbiguous'):
+    data = tmp_path / "data"
+    nested = data / "assays"
+    nested.mkdir(parents=True)
+    (data / "SAME.xlsx").write_bytes(b"root")
+    (nested / "same.xlsx").write_bytes(b"nested")
+    cfg = RunConfig(
+        data_root=data, work_dir=tmp_path / "run", source_folders=(), workbook_folders=("assays",)
+    )
+    with pytest.raises(ValueError, match="[Dd]uplicate|[Aa]mbiguous"):
         create_workspace(cfg)
     assert not cfg.work_dir.exists()
 
 
 def test_legacy_config_without_empty_workbook_option_remains_verifiable(tmp_path):
     from csi_maize.engine import verify_input_bindings
-    data=tmp_path/'data';data.mkdir()
-    cfg=RunConfig(data_root=data,work_dir=tmp_path/'run',source_folders=())
+
+    data = tmp_path / "data"
+    data.mkdir()
+    cfg = RunConfig(data_root=data, work_dir=tmp_path / "run", source_folders=())
     create_workspace(cfg)
-    path=cfg.work_dir/'run_config.json';stored=json.loads(path.read_text())
-    stored.pop('workbook_folders')
+    path = cfg.work_dir / "run_config.json"
+    stored = json.loads(path.read_text())
+    stored.pop("workbook_folders")
     path.write_text(json.dumps(stored))
     verify_input_bindings(cfg)
 

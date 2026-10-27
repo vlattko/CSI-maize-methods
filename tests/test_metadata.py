@@ -265,47 +265,60 @@ class MetadataTests(unittest.TestCase):
             self.build()
 
     def test_valid_jpeg_header_cannot_hide_a_truncated_pixel_stream(self):
-        session=self.root/'images/capture_session_C1_1-1'
-        for camera in ('rgb','noir'):
-            (session/camera).mkdir(parents=True)
+        session = self.root / "images/capture_session_C1_1-1"
+        for camera in ("rgb", "noir"):
+            (session / camera).mkdir(parents=True)
             for view in range(40):
-                Image.new('RGB',(64,48),'green').save(session/camera/f'view_{view}.jpg')
-        damaged=session/'noir/view_0.jpg'
+                Image.new("RGB", (64, 48), "green").save(session / camera / f"view_{view}.jpg")
+        damaged = session / "noir/view_0.jpg"
         damaged.write_bytes(damaged.read_bytes()[:-8])
         # This reproduces the archive defect: a header-only check succeeds.
-        with Image.open(damaged) as im:im.verify()
         with Image.open(damaged) as im:
-            with self.assertRaises(OSError):im.load()
-        (self.root/'prototype').mkdir()
-        (self.root/'prototype/config.json').write_text(json.dumps({'source_folders':['images']}))
+            im.verify()
+        with Image.open(damaged) as im:
+            with self.assertRaises(OSError):
+                im.load()
+        (self.root / "prototype").mkdir()
+        (self.root / "prototype/config.json").write_text(json.dumps({"source_folders": ["images"]}))
         self.build()
-        self.assertEqual(read_csv(self.audit/'reference_master.csv')[0]['image_status'],
-                         'incomplete_extracted_session')
-        inventory=read_csv(self.audit/'image_manifest.csv')
-        record=next(r for r in inventory if r['path'].endswith('noir/view_0.jpg'))
-        self.assertNotEqual(record['container_check_error'],'')
+        self.assertEqual(
+            read_csv(self.audit / "reference_master.csv")[0]["image_status"],
+            "incomplete_extracted_session",
+        )
+        inventory = read_csv(self.audit / "image_manifest.csv")
+        record = next(r for r in inventory if r["path"].endswith("noir/view_0.jpg"))
+        self.assertNotEqual(record["container_check_error"], "")
 
     def test_source_audit_retains_empty_sessions_and_full_pixel_decoding(self):
-        session=self.root/'images/capture_session_C1_1-1'
-        for camera in ('rgb','noir'):
-            (session/camera).mkdir(parents=True)
-            for view in range(40):Image.new('RGB',(64,48),'green').save(session/camera/f'view_{view}.jpg')
-        damaged=session/'noir/view_0.jpg';damaged.write_bytes(damaged.read_bytes()[:-8])
-        (self.root/'images/capture_session_C1_2-1').mkdir()
-        base=self.root/'prototype/research_v2';base.mkdir(parents=True)
-        cfg=json.dumps({'source_folders':['images']})
-        (base/'config.json').write_text(cfg)
-        (self.root/'prototype/config.json').write_text(cfg)
+        session = self.root / "images/capture_session_C1_1-1"
+        for camera in ("rgb", "noir"):
+            (session / camera).mkdir(parents=True)
+            for view in range(40):
+                Image.new("RGB", (64, 48), "green").save(session / camera / f"view_{view}.jpg")
+        damaged = session / "noir/view_0.jpg"
+        damaged.write_bytes(damaged.read_bytes()[:-8])
+        (self.root / "images/capture_session_C1_2-1").mkdir()
+        base = self.root / "prototype/research_v2"
+        base.mkdir(parents=True)
+        cfg = json.dumps({"source_folders": ["images"]})
+        (base / "config.json").write_text(cfg)
+        (self.root / "prototype/config.json").write_text(cfg)
         self.build()
-        methods=Path(__file__).resolve().parents[1]/'src/csi_maize/_methods'
-        result=subprocess.run([sys.executable,str(methods/'source_audit.py')],
-                              env=dict(os.environ,CSI_MAIZE_WORKSPACE=str(self.root),PYTHONPATH=str(methods)),
-                              capture_output=True,text=True)
-        self.assertEqual(result.returncode,0,result.stderr)
-        sessions=read_csv(self.audit/'session_manifest.csv')
-        self.assertEqual(len(sessions),2,'Empty acquisition disappeared during source audit')
-        rows=read_csv(self.audit/'image_manifest.csv')
-        self.assertEqual(next(r for r in rows if r['path'].endswith('noir/view_0.jpg')).get('full_decode_ok'),'False')
+        methods = Path(__file__).resolve().parents[1] / "src/csi_maize/_methods"
+        result = subprocess.run(
+            [sys.executable, str(methods / "source_audit.py")],
+            env=dict(os.environ, CSI_MAIZE_WORKSPACE=str(self.root), PYTHONPATH=str(methods)),
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        sessions = read_csv(self.audit / "session_manifest.csv")
+        self.assertEqual(len(sessions), 2, "Empty acquisition disappeared during source audit")
+        rows = read_csv(self.audit / "image_manifest.csv")
+        self.assertEqual(
+            next(r for r in rows if r["path"].endswith("noir/view_0.jpg")).get("full_decode_ok"),
+            "False",
+        )
 
 
 if __name__ == "__main__":

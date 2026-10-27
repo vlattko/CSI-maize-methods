@@ -114,8 +114,8 @@ for invalid in [rows[:-1], rows+[rows[0]]]:
 
     def test_index_requires_successful_decoding_status_not_only_nonempty_counts(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory)
-            code="""
+            root = Path(directory)
+            code = """
 import csv,json
 from bootstrap import BASE,ROOT
 BASE.mkdir(parents=True)
@@ -143,8 +143,8 @@ assert build_index()[0]['eligible'] is True
 reference('')
 assert build_index()[0]['eligible'] is False,'Missing decode evidence became model-eligible'
 """
-            result=self.run_method_code(root,code)
-            self.assertEqual(result.returncode,0,result.stderr)
+            result = self.run_method_code(root, code)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_cache_fingerprint_tracks_masks_phase_helpers_and_payload(self):
         with tempfile.TemporaryDirectory() as directory:
