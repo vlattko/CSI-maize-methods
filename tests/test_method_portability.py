@@ -112,6 +112,40 @@ for invalid in [rows[:-1], rows+[rows[0]]]:
         for name in module.STAGES:
             visit(name)
 
+    def test_index_requires_successful_decoding_status_not_only_nonempty_counts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            code="""
+import csv,json
+from bootstrap import BASE,ROOT
+BASE.mkdir(parents=True)
+(BASE/'config.json').write_text(json.dumps(dict(source_folders=['images'],reference_table='reference.csv',identity_mapping='prototype/mapping.csv',allowed_views_per_camera=[40])))
+session=ROOT/'images/capture_session_C1_1-1'
+for camera in ['rgb','noir']:
+    (session/camera).mkdir(parents=True)
+    for view in range(40):(session/camera/f'image_{view:03d}.jpg').write_bytes(b'nonempty')
+def reference(status):
+    with (ROOT/'reference.csv').open('w',newline='') as stream:
+        writer=csv.writer(stream);writer.writerow(['treatment','measurement','genotype','replicate','image_status'])
+        writer.writerow(['C','1','Os024445','1',status])
+    (ROOT/'research_audit').mkdir(exist_ok=True)
+    with (ROOT/'research_audit/image_manifest.csv').open('w',newline='') as stream:
+        writer=csv.writer(stream);writer.writerow(['path','bytes','full_decode_ok','container_check_error'])
+        for path in sorted(session.rglob('*.jpg')):
+            writer.writerow([path.relative_to(ROOT).as_posix(),path.stat().st_size,
+                             status=='complete_40_plus_40_container_checks',
+                             '' if status=='complete_40_plus_40_container_checks' else 'OSError'])
+from common import build_index
+reference('incomplete_extracted_session')
+assert build_index()[0]['eligible'] is False,'Nonempty but undecodable images became model-eligible'
+reference('complete_40_plus_40_container_checks')
+assert build_index()[0]['eligible'] is True
+reference('')
+assert build_index()[0]['eligible'] is False,'Missing decode evidence became model-eligible'
+"""
+            result=self.run_method_code(root,code)
+            self.assertEqual(result.returncode,0,result.stderr)
+
     def test_cache_fingerprint_tracks_masks_phase_helpers_and_payload(self):
         with tempfile.TemporaryDirectory() as directory:
             code = """

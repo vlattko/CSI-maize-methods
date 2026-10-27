@@ -164,6 +164,14 @@ def build_index():
     cfg = config()
     refs = reference()
     mapping = load_mapping()
+    evidence = ROOT / "research_audit/image_manifest.csv"
+    decoded = {}
+    if evidence.is_file():
+        for row in read_csv(evidence):
+            name = row["path"].replace("\\", "/")
+            if name in decoded:
+                raise ValueError("Duplicate image-decoding evidence: " + name)
+            decoded[name] = row
     records = []
     seen = {}
     paths = set()
@@ -202,6 +210,13 @@ def build_index():
         complete = complete_views(
             nonempty["rgb"], nonempty["noir"], cfg["allowed_views_per_camera"]
         ) and not sum(empty.values())
+        decode_complete = all(
+            (entry := decoded.get(workspace_relative(p))) is not None
+            and str(entry.get("full_decode_ok", "")).lower() == "true"
+            and not entry.get("container_check_error")
+            and int(entry["bytes"]) == p.stat().st_size
+            for camera in ("rgb", "noir") for p in nonempty[camera]
+        ) and bool(nonempty["rgb"] and nonempty["noir"])
         records.append(
             {
                 "session": relative,
@@ -211,7 +226,8 @@ def build_index():
                 "noir_nonempty": counts["noir"],
                 "empty_files": sum(empty.values()),
                 "count_complete": complete,
-                "eligible": status == "identified" and complete,
+                "decode_complete": decode_complete,
+                "eligible": status == "identified" and complete and decode_complete,
             }
         )
     write_csv(OUT / "sessions.csv", records)

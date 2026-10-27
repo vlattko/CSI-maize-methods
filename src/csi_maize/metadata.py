@@ -61,6 +61,7 @@ IMAGE_FIELDS = (
     "exposure_s",
     "iso",
     "container_check_error",
+    "full_decode_ok",
 )
 
 
@@ -288,7 +289,9 @@ def _session_inventory(
                         raw_exposure = details.get(33434, exif.get(33434))
                         exposure = float(raw_exposure) if raw_exposure is not None else None
                         iso = details.get(34855, exif.get(34855))
-                        image.verify()
+                        # JPEG verify() checks its header without decoding the
+                        # entropy stream. Full load catches truncated pixels.
+                        image.load()
                     record[camera + "_container_ok"] += 1
                 except Exception as exc:
                     error = type(exc).__name__
@@ -311,6 +314,7 @@ def _session_inventory(
                         "exposure_s": exposure,
                         "iso": iso,
                         "container_check_error": error,
+                        "full_decode_ok": not bool(error),
                     }
                 )
         record.update(

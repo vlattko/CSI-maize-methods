@@ -47,6 +47,15 @@ data/
 
 The complete workbook schema is described in [metadata.md](metadata.md). Keep native spectral grids and the four identity keys. Timestamp-only sessions require an evidence-backed identity mapping; chronological sorting is not a mapping. Laboratory/biomass records are not joined to image targets without a sampling crosswalk.
 
+For an archive with `IMAGES/` at its root and instrument workbooks in an explicit subfolder, initialize with repeated source/workbook options:
+
+```sh
+csi-maize init --data-root /path/to/archive --work-dir runs/expanded --source-folder IMAGES --workbook-folder CSI-maize_6 --expected-acquisitions 0
+csi-maize run --config runs/expanded/run_config.json --target index
+```
+
+Top-level workbooks are always included. Additional workbook folders are relative to the declared data root, copied without changing bytes and fingerprinted at their original relative locations. Ambiguous duplicate basenames are rejected before creating a workspace. `--expected-acquisitions 0` removes the reference-count assertion; it does not infer organ observations, calibrate cameras or turn the prescribed geometry examples into models of every indexed plant.
+
 The prescribed study profile uses 41 eligible acquisitions, each with indices 0–39 from both cameras. `13das` and `19das` are documentary labels, not independently verified visit ages. Other named or unresolved directories remain in the inventory. Count-based eligibility is distinct from segmentation quality.
 
 The real-image geometry demonstrations use the supplied distal seeds in two views and the case-specific camera/shape assumptions documented in [methods.md](methods.md). These inputs are explicit in the corresponding method modules. A new plant requires new observation review; changing a cohort count does not infer its organ identities.

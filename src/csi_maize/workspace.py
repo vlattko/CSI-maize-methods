@@ -41,10 +41,29 @@ def _bind_directory(source: Path, target: Path):
     return "junction"
 
 
+def workbook_inputs(config: RunConfig) -> dict[str, Path]:
+    """Resolve explicitly declared workbook locations without basename ambiguity."""
+    result = {}
+    seen = set()
+    folders = [config.data_root, *(config.data_root / name for name in config.workbook_folders)]
+    for folder in folders:
+        if not folder.is_dir():
+            raise ValueError("Workbook folder is unavailable: " + str(folder))
+        for raw in sorted(folder.glob("*.xlsx")):
+            if not raw.resolve().is_relative_to(config.data_root.resolve()):
+                raise ValueError("Workbook escapes the declared data root")
+            if raw.name.casefold() in seen:
+                raise ValueError("Ambiguous duplicate workbook basename: " + raw.name)
+            seen.add(raw.name.casefold())
+            result[raw.name] = raw
+    return result
+
+
 def create_workspace(config: RunConfig) -> Path:
     root = config.work_dir
     if not config.data_root.is_dir():
         raise ValueError("Raw data directory does not exist")
+    books = workbook_inputs(config)
     if root.exists() and any(root.iterdir()):
         raise ValueError("Refusing to reuse a nonempty workspace; use an empty directory or resume")
     root.mkdir(parents=True, exist_ok=True)
@@ -79,7 +98,7 @@ def create_workspace(config: RunConfig) -> Path:
     if about.is_dir():
         kind = _bind_directory(about.absolute(), root / "about")
         bindings.append(dict(logical_path="about", source_path=str(about.absolute()), kind=kind))
-    for raw in sorted(config.data_root.glob("*.xlsx")):
+    for raw in books.values():
         shutil.copyfile(raw, root / raw.name)
         assert digest(raw) == digest(root / raw.name)
     mapping = config.data_root / "prototype/identity_mapping.csv"

@@ -131,6 +131,11 @@ def main():
         and p.parent.name.lower() in ["rgb", "noir"]
         and p.parent.parent.name.startswith("capture_session")
     }
+    # Keep acquisition directories even when no image survived copying.
+    for relative in config().get("source_folders", []):
+        parent = safe_source(relative)
+        if parent.is_dir():
+            session_paths.update(p for p in parent.rglob("capture_session*") if p.is_dir())
     for session in sorted(session_paths):
         match = re.fullmatch(r"capture_session_([CSP])(\d+)_(\d+)-(\d+)", session.name)
         key = None
@@ -156,7 +161,7 @@ def main():
                         date = ex.get(36867)
                         exposure = float(ex[33434]) if 33434 in ex else None
                         iso = ex.get(34855)
-                        im.verify()
+                        im.load()
                     good[camera] += 1
                 except Exception as e:
                     error = type(e).__name__ + ": " + str(e)
@@ -181,6 +186,7 @@ def main():
                         "exposure_s": exposure,
                         "iso": iso,
                         "container_check_error": error,
+                        "full_decode_ok": not bool(error),
                     }
                 )
         sessions.append(
@@ -214,13 +220,15 @@ def main():
             values = np.array(
                 [row[fv] for row in rows[1:] if row[0] == t and row[1] == m], dtype=float
             )
+            if not len(values):
+                continue
             stats.append(
                 {
                     "treatment": t,
                     "measurement": m,
                     "n": len(values),
                     "Fv_Fm_mean": float(values.mean()),
-                    "Fv_Fm_sd": float(values.std(ddof=1)),
+                    "Fv_Fm_sd": float(values.std(ddof=1)) if len(values) > 1 else None,
                     "Fv_Fm_min": float(values.min()),
                     "Fv_Fm_max": float(values.max()),
                 }

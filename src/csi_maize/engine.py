@@ -12,7 +12,7 @@ import time
 
 from .config import RunConfig
 from .provenance import append_event, digest, file_manifest, utc, verify_files, write_json
-from .workspace import contained_output, create_workspace
+from .workspace import contained_output, create_workspace, workbook_inputs
 
 
 def ordered_stages(stages: dict, targets: list[str]) -> list[str]:
@@ -49,7 +49,7 @@ def source_hashes():
 
 
 def raw_hashes(config: RunConfig):
-    files = {p for p in config.data_root.glob("*.xlsx") if p.is_file()}
+    files = set(workbook_inputs(config).values())
     for folder in config.source_folders:
         parent = config.data_root / folder
         if parent.is_dir():
@@ -195,11 +195,11 @@ def verify_input_bindings(config):
     for name in config.source_folders:
         if (config.data_root / name).exists() and name not in seen:
             raise ValueError(f"Required source folder is not bound: {name}")
-    for raw in config.data_root.glob("*.xlsx"):
+    for raw in workbook_inputs(config).values():
         copy = config.work_dir / raw.name
         if not copy.is_file() or digest(raw) != digest(copy):
             raise ValueError(f"Materialized workbook changed or is missing: {raw.name}")
-    stored = json.loads((config.work_dir / "run_config.json").read_text(encoding="utf-8"))
+    stored = RunConfig.load(config.work_dir / "run_config.json").to_dict()
     if stored != config.to_dict():
         raise ValueError("Materialized run configuration changed")
     base = config.work_dir / "prototype/research_v2"
