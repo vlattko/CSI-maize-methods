@@ -62,6 +62,7 @@ synthetic identities and visits. Neither provides real-browser visual QA.
 | `perspective_turntable_development_2026-10-27` | Conditional perspective/orthographic point-model comparison | Full-cohort extraction and completed tracking output |
 | `rotation_workbench_2026-10-27` | Source sprites and a forty-index inspection workbench | Full-cohort inputs, tracking graphs and optionally camera lookup |
 | `topology_foreground_development_2026-10-27` | Matched U-Net foreground arms with and without soft-clDice | Explicit prepared frame manifest, unchanged dense teacher masks and selection gate |
+| `performance_prediction_2026-10-28` | Retrospective harvest prediction, phase and assay controls, and independent scikit-learn verification | Confirmed pot labels/identities, session/view traits and assay export table |
 
 Each directory has a README and its executable programs accept explicit input
 and output paths. For example:
@@ -212,3 +213,25 @@ empty masks and compares coverage as well as conditional image agreement.
 The held-out U-Net comparison reuses frozen test predictions and checks their
 pixel metrics before tracking, with no new inference, threshold selection or
 anatomical accuracy claim.
+
+## Retrospective harvest prediction
+
+The [performance protocol](../experiments/development/performance_prediction_2026-10-28/README.md)
+uses predictors available by each declared visit, train-only preprocessing and
+nested genotype, treatment or joint transfer splits. Fixed-phase, assay and
+appearance controls share the core numerical implementation. Treatment and
+calendar run remain confounded; there is no independent test cohort. Paired
+bootstrap intervals condition on saved predictions and do not describe
+retraining uncertainty.
+
+The two independent verifiers rebuild inputs and selected fits without importing
+the prediction implementation. They accept explicit source/run/output paths and
+optional unique-basename rebasing for a separately supplied reviewer input
+package. Public tests use synthetic fixtures only. Run this branch alone with:
+
+```sh
+python experiments/development/run_tests.py --branch performance_prediction_2026-10-28 --report runs/performance-tests.json
+```
+
+Raw labels, assay exports, identity registries, fitted results and reviewer data
+are not included in the source release. No public-source test requires them.

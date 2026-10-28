@@ -29,3 +29,9 @@ has Node behavior coverage but no completed real-browser visual QA.
 Original project code is MIT licensed; see [`LICENSE`](LICENSE) and the root
 [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md) for external software
 and model terms. No third-party model weights are redistributed.
+
+The [harvest-prediction branch](performance_prediction_2026-10-28/README.md)
+compares image area, shape and history under nested genotype, treatment and
+joint transfer splits. Its seven core tests, five independent-verifier path
+tests and five CLI help checks run through the same isolated harness. Source
+inputs and retrospective results remain outside this public package.

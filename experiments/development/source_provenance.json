@@ -845,6 +845,72 @@
       "original_relative": "prototype/research_v2/investigations/topology_foreground_development_2026-10-27/train_topology.py",
       "original_sha256": "d2ec211f70fd4949082b65e248482875e154cf623dd295288c4e9a0028d1319a",
       "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/performance_core.py",
+      "public_sha256": "92161847ec6e92b81c0e85528e56383aa2d4f5d5cfceecc46a22a66f0f89680b",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/performance_core.py",
+      "original_sha256": "92161847ec6e92b81c0e85528e56383aa2d4f5d5cfceecc46a22a66f0f89680b",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/README.md",
+      "public_sha256": "138d911806064ad30f3cc44a6b31d7cd37755fd3892925f0eac681d753f18a52",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/README.md",
+      "original_sha256": "ecf5ab2ec9a7e48f7ad84db95c99e69d06ae37fe8bee56745acff34fa2b0ba75",
+      "unchanged": false,
+      "public_change": "Document the confirmed_pot_observations.csv synthesis prerequisite and its existing sibling dynamics.py producer; numerical implementation is unchanged."
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/run_extensions.py",
+      "public_sha256": "125abb262e18257b0bf4802d66ccce132f5deb4eafbc56679f292e945a210771",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/run_extensions.py",
+      "original_sha256": "125abb262e18257b0bf4802d66ccce132f5deb4eafbc56679f292e945a210771",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/run_performance.py",
+      "public_sha256": "7a8817502311f50bd03541a978a1fcb8a11cdb9883eb21be33e9be99594b03b3",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/run_performance.py",
+      "original_sha256": "7a8817502311f50bd03541a978a1fcb8a11cdb9883eb21be33e9be99594b03b3",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/synthesize.py",
+      "public_sha256": "bb852d00871c789b3faa64a3ed338db4a4875fa7578cf8711895279e516bd20f",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/synthesize.py",
+      "original_sha256": "bb852d00871c789b3faa64a3ed338db4a4875fa7578cf8711895279e516bd20f",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/test_performance.py",
+      "public_sha256": "d6d5e57720abeb06180ea6918d24265928b9594d2fa97c44dcc534bca3257036",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/test_performance.py",
+      "original_sha256": "d6d5e57720abeb06180ea6918d24265928b9594d2fa97c44dcc534bca3257036",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/verification/test_portability.py",
+      "public_sha256": "9dc3a656792be1232a510eaf0a81b9b10f06826a19054ad971dd6c4a305373e9",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/verification/test_portability.py",
+      "original_sha256": "9dc3a656792be1232a510eaf0a81b9b10f06826a19054ad971dd6c4a305373e9",
+      "unchanged": true
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/verification/verify_extensions_sklearn.py",
+      "public_sha256": "4493e22b908f60d426f76caba2a72cbe285b99127fe8d93dd12a3d4fcf8f1f6b",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/verification/verify_extensions_sklearn.py",
+      "original_sha256": "f755678accdd5572609f313b035c1ea705ace921797dd87495422b98ed932ca6",
+      "unchanged": false,
+      "public_change": "Normalize CRLF to LF only; executable statements and numerical implementation are unchanged."
+    },
+    {
+      "public_relative": "performance_prediction_2026-10-28/verification/verify_new_run_sklearn.py",
+      "public_sha256": "ab63bb017f16b68f4dcef0bcbbdfdcec9ebecd52f0bbc460561266cd5336951c",
+      "original_relative": "prototype/research_v2/investigations/performance_prediction_2026-10-28/verification/verify_new_run_sklearn.py",
+      "original_sha256": "df730f34ebab851df37ff634a21cbcd4875ca4f22350e7861a90bce93292fb03",
+      "unchanged": false,
+      "public_change": "Normalize CRLF to LF only; executable statements and numerical implementation are unchanged."
     }
   ],
   "new_session_source_status": "Frozen branch authorized after independent 13-test and three-capture checks; public known-mask fixture binds explicit repository.",

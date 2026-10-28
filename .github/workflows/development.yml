@@ -46,6 +46,9 @@ jobs:
                              'experiments/development/leaf_review_workbench_2026-10-27/workbench_shell.html',
                              'experiments/development/rotation_workbench_2026-10-27/test_workbench.mjs',
                              'experiments/development/rotation_workbench_2026-10-27/workbench.html',
+                             'experiments/development/performance_prediction_2026-10-28/run_performance.py',
+                             'experiments/development/performance_prediction_2026-10-28/verification/verify_new_run_sklearn.py',
+                             'experiments/development/performance_prediction_2026-10-28/verification/verify_extensions_sklearn.py',
                              'docs/development.md', '.github/workflows/development.yml'):
                   assert any(name.endswith('/' + suffix) for name in names), suffix
               for entry in members:

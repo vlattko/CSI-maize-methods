@@ -33,6 +33,7 @@ BRANCHES = (
     "strict_index_sensitivity_2026-10-27",
     "foreground_tracking_sensitivity_2026-10-27",
     "longitudinal_confirmation_2026-10-28",
+    "performance_prediction_2026-10-28",
 )
 OPTIONAL_TEST_DEPENDENCIES = {
     "topology_foreground_development_2026-10-27": ("torch",),
@@ -61,6 +62,7 @@ HELP_SCRIPTS.update({
     "strict_index_sensitivity_2026-10-27": ("strict_run.py", "strict_verify.py"),
     "foreground_tracking_sensitivity_2026-10-27": ("tracking_sensitivity.py", "heldout_unet.py"),
     "longitudinal_confirmation_2026-10-28": ("registry.py", "dynamics.py", "study_metadata.py", "mass_validation.py", "verify_mass.py"),
+    "performance_prediction_2026-10-28": ("run_performance.py", "run_extensions.py", "synthesize.py", "verification/verify_new_run_sklearn.py", "verification/verify_extensions_sklearn.py"),
 })
 
 def missing_optional(branch, find_spec=importlib.util.find_spec):
