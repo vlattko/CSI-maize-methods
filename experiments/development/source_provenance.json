@@ -667,11 +667,11 @@
     },
     {
       "public_relative": "new_session_pipeline_development_2026-10-27/test_capture.py",
-      "public_sha256": "87f21c02567a87ef92225fbadd1e0b3590dce4f1e5f03c9ec79db23530592041",
+      "public_sha256": "8c26f2f1f85cc34684599535f2e68102a2fac1662cedc048da28576afa85b470",
       "original_relative": "prototype/research_v2/investigations/new_session_pipeline_development_2026-10-27/test_capture.py",
-      "original_sha256": "0691dead56a5e6c25cd9829dbb4f7a85cedd9898e3df307b5f0f7809e398466f",
+      "original_sha256": "93251b9a4629bc8538b541dfaa331c1a45aaffae52d0552a478dea128c37a74b",
       "unchanged": false,
-      "public_change": "Bind the controlled known-mask pipeline fixture explicitly to the public source checkout via repo; no numerical operator change."
+      "public_change": "Bind the controlled known-mask pipeline fixture explicitly to the public source checkout via repo; no numerical operator change.; alias fixture canonicalizes its temporary root and exercises a lexical noncanonical input; numerical operator unchanged."
     },
     {
       "public_relative": "perspective_turntable_development_2026-10-27/README.md",

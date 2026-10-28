@@ -33,9 +33,10 @@ class CaptureTests(unittest.TestCase):
     def test_resolved_camera_alias_is_rejected(self):
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as td:
-            root=Path(td);original=Path.resolve
+            root=Path(td)/'..'/Path(td).name;original=Path.resolve
+            canonical_root=original(root)
             def alias(path,*args,**kwargs):
-                if path==root/'rgb' or path==root/'noir':return root/'shared'
+                if path==canonical_root/'rgb' or path==canonical_root/'noir':return canonical_root/'shared'
                 return original(path,*args,**kwargs)
             with patch.object(Path,'resolve',alias):
                 with self.assertRaises(ValueError):inventory(root,validate_session(self.session()))
