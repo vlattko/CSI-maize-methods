@@ -71,6 +71,19 @@ class PairingTests(unittest.TestCase):
         self.assertEqual(exg['valid_pixels'],exg['eligible_pixels'])
         self.assertEqual(exg['median'],0)
 
+    def test_smallest_bilinear_clipped_contributor_is_not_repaired(self):
+        mask=np.ones((20,20),bool)
+        rgb=np.full((20,20,3),80,np.uint8)
+        noir=np.full_like(rgb,120);noir[6,6,0]=255
+        matrix=np.array([[1,0,1/32],[0,1,1/32]],np.float32)
+        _,_,maps,supports,warped,_=run.describe(rgb,mask,noir,mask,matrix,True)
+        self.assertTrue(supports['cross'][5,5])
+        # OpenCV's 1/32 grid gives the diagonal clipped contributor weight1/1024.
+        self.assertEqual(float(warped[5,5,0]),120+(255-120)/1024)
+        self.assertTrue(np.isnan(maps['ND_rgb_R__noir_R'][5,5]))
+        self.assertTrue(np.isfinite(maps['ND_rgb_R__noir_B'][5,5]))
+        self.assertTrue(np.isfinite(maps['ExG'][5,5]))
+
     def test_empty_guard(self):
         with self.assertRaises(ValueError):
             moment_affine(np.zeros((10,10)),np.ones((10,10)),np)

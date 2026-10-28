@@ -88,7 +88,7 @@ def describe(a, am, b, bm, matrix, usable):
     native_valid = ((b > 1) & (b < 254)).astype(np.float32)
     warped_valid, _ = warp_to_rgb(native_valid, matrix, am.shape)
     six = np.concatenate([a.astype(np.float32), wb], axis=-1)
-    channel_valid = np.concatenate([(a > 1) & (a < 254), warped_valid > 0.999], axis=-1)
+    channel_valid = np.concatenate([(a > 1) & (a < 254), warped_valid >= 1 - 1e-7], axis=-1)
     supports = dict(rgb=ai, noir=ni, cross=common if usable else np.zeros_like(common))
     maps = spatial_indices(six, supports, channel_valid)
     descriptors = []

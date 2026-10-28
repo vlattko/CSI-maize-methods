@@ -22,6 +22,25 @@ The 15-case CSI geometry diagnostic retained camera alternatives and an explorat
 
 Paired-camera analysis retained all 1,440 quarter-view anchors, 12,230 registration/control rows and 330,210 per-formula rows. Nominal median IoU rose from 0.598 with moment initialization to 0.845 with ECC. Dark NoIR green output made many six-channel formulas unavailable. Each formula retained its own support; only two acquisitions had all 27 formulas. The focused DN baseline uses the same guarded common-overlap support as its cross-channel formulas.
 
+### Interpolation validity correction in version 0.3
+
+The archived full-cohort results above were executed with the original research
+operators and the version 0.2 validity tolerance. Their interpolated binary
+validity field used `> 0.999`. With OpenCV bilinear sampling, an invalid source
+channel can contribute weight `1/1024` after a `1/32`-pixel shift in each axis;
+the resulting validity value `1023/1024` passes that tolerance even though one
+contributor is clipped or dark.
+
+Public version 0.3 requires `>= 1 - 1e-7` for the paired-descriptor and matched-DN
+channel-validity fields and the affine image-field support. Nearest-neighbor
+sampling retains its existing behavior. The spatial producer's existing
+`> 0.999999` channel guard already rejects this contributor and is unchanged.
+The correction enforces the declared all-contributors-valid rule; it can alter
+pixel denominators, values or availability in a new run. Archived results and
+their frozen execution sources are retained under their original operators,
+without relabeling them as strict-guard results. A run with the corrected source
+has different operator hashes and must retain separate provenance.
+
 Prediction comprised 84 completed experiments and 270,132 independently checked row-model records. Preprocessing and ridge tuning use training folds. Held-out genotype, held-out treatment and shuffled-trajectory controls remain distinct. SAM traits and frozen DINO descriptors did not improve fluorescence prediction over metadata here. A small genotype-split NIR descriptor improvement did not persist under treatment transfer. These are within-experiment associations rather than additional spectral measurements or external physiological validation.
 
 ## Scope of software validation

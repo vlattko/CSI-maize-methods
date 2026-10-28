@@ -159,7 +159,7 @@ def main():
                 common=interior(am)&(wn>0)&field
                 validity,_=warp_to_rgb(((b>1)&(b<254)).astype(np.float32),matrix,am.shape)
                 six=np.concatenate([a.astype(np.float32),wb],axis=-1)
-                channel_valid=np.concatenate([(a>1)&(a<254),validity>.999],axis=-1)
+                channel_valid=np.concatenate([(a>1)&(a<254),validity>=1-1e-7],axis=-1)
                 output=frame_statistics(six,channel_valid,common)
             except Exception as exc:
                 reason=type(exc).__name__+':'+str(exc)

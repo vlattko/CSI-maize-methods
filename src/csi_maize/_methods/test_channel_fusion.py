@@ -29,6 +29,19 @@ class FusionTests(unittest.TestCase):
         self.assertEqual([(r["i"], r["j"]) for r in selected if r["accepted"]], [(0, 0), (1, 1)])
         self.assertEqual(match_instances(np.zeros((2, 3))), [])
 
+    def test_subpixel_border_requires_full_linear_field_but_nearest_is_unchanged(self):
+        noir = np.full((6, 6), 80, np.float32)
+        matrix = np.array([[1, 0, 1 / 32], [0, 1, 1 / 32]], np.float32)
+        moved, field = warp_to_rgb(noir, matrix, noir.shape)
+        self.assertEqual(float(moved[5, 5]), 80 * (31 / 32) ** 2)
+        self.assertFalse(field[5, 5])
+        self.assertFalse(field[5, 4])
+        self.assertFalse(field[4, 5])
+        self.assertTrue(field[4, 4])
+        nearest, nearest_field = warp_to_rgb(noir, matrix, noir.shape, nearest=True)
+        self.assertEqual(float(nearest[5, 5]), 80)
+        self.assertTrue(nearest_field.all())
+
     def test_ambiguous_matches_not_accepted(self):
         self.assertFalse(
             any(r["accepted"] for r in match_instances(np.array([[0.8, 0.78], [0.77, 0.79]])))

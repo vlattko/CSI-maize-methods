@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "csi-maize-methods"
-version = "0.2.0"
+version = "0.3.0"
 description = "Reproducible circular maize phenotyping and leaf-scale architectural experiments"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
@@ -19,6 +19,7 @@ dependencies = [
   "openpyxl>=3.1,<4", "matplotlib>=3.8,<4", "opencv-python>=4.10,<6",
   "scikit-image>=0.24,<0.27", "scikit-learn>=1.5,<2", "threadpoolctl>=3.5,<4",
   "jsonschema>=4.20,<5", "trimesh>=5.1,<6",
+  "pandas>=2.3,<3",
 ]
 
 [project.optional-dependencies]

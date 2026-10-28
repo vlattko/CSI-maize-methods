@@ -29,6 +29,14 @@ Open `runs/example/reports/CSI_maize_architecture.html`. The HTML embeds its mes
 
 The [full-cohort protocol](experiments/full_cohort/README.md) processes all keyed acquisitions, including partial rotations, with explicit observation coverage. It includes grouped prediction controls, registered channel descriptors and known-geometry tracking and exposure tests. Its [evidence and limitations](docs/full-cohort.md) distinguish component validation from automatic anatomical reconstruction.
 
+## Develop automated plant digitization
+
+The [development workflows](docs/development.md) add teacher-distilled RGB/NoIR foreground models, a connectivity-aware U-Net, rotation-conditioned camera alignment, candidate temporal graphs and offline leaf-annotation tools. A new capture can be processed without the study spreadsheets: its explicit session description preserves camera identity, fixed frame indices, missing observations and unverified physical continuity.
+
+The single-capture workflow produces masks, 39 pixel-based image traits, supported rotational terminal hypotheses and an offline report. Its fusion stage fits the camera from training angles, checks withheld angles and calculates 27 spatial channel formulas only where camera and pixel support permit. Unsupported rotations and inadequate alignment retain an explicit abstention. These features do not supply anatomical leaf labels or calibrated spectral measurements.
+
+Development commands are distributed as source extensions under `experiments/development`, with separate tests and dependency requirements. Pretrained assets, study images and fitted model weights are not included. The original controlled example remains available from the installed package.
+
 ## Recompute the source assisted study from its inputs
 
 The raw-data route requires the original images, spreadsheets and supplied observation seeds, plus the pinned model assets. The Zenodo link above will identify the archival inputs after publication, when the deposit is available. We do not substitute cached results for a raw run.
@@ -57,7 +65,7 @@ Each run uses a separate workspace. Its manifest records source code, configurat
 JavaScript interaction checks use Node.js 22 and its standard library.
 
 ```sh
-python -m pytest tests -q
+python -m pytest -q
 node tests/web_behavior.cjs
 python -m build
 ```

@@ -31,7 +31,7 @@ def warp_to_rgb(noir, forward_rgb_to_noir, shape, nearest=False):
     support = cv2.warpAffine(
         np.ones(noir.shape[:2], np.float32), inv, size, flags=flag, borderMode=cv2.BORDER_CONSTANT
     )
-    return moved, support > 0.999
+    return moved, support >= 1 - 1e-7
 
 
 def interior(mask):

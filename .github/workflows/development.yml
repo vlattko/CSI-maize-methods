@@ -1,0 +1,82 @@
+name: Source-only development investigations
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  base:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install base and test dependencies
+        run: python -m pip install -e ".[test]"
+      - name: Run isolated source-only checks
+        run: python experiments/development/run_tests.py --report runs/development-base.json
+      - name: Check fatal source errors
+        run: python -m ruff check experiments/development --select E9,F63,F7,F82
+      - name: Check source distribution includes programs and templates only
+        run: |
+          python -m build --sdist --outdir dist/development
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile
+          with tarfile.open(next(Path('dist/development').glob('*.tar.gz'))) as archive:
+              members = archive.getmembers()
+              names = [entry.name for entry in members]
+              for suffix in ('experiments/development/run_tests.py', 'experiments/development/source_provenance.json',
+                             'experiments/development/leaf_review_workbench_2026-10-27/review_app.test.js',
+                             'experiments/development/leaf_review_workbench_2026-10-27/workbench_shell.html',
+                             'experiments/development/rotation_workbench_2026-10-27/test_workbench.mjs',
+                             'experiments/development/rotation_workbench_2026-10-27/workbench.html',
+                             'docs/development.md', '.github/workflows/development.yml'):
+                  assert any(name.endswith('/' + suffix) for name in names), suffix
+              for entry in members:
+                  if '/experiments/development/' not in entry.name or not entry.isfile():
+                      continue
+                  path = Path(entry.name)
+                  assert path.name == 'LICENSE' or path.suffix in {'.py', '.md', '.json', '.js', '.mjs', '.html'}
+                  assert path.name != 'PLAN.md' and entry.size < 150000
+                  assert not {'assets', 'execution_sources', '__pycache__'} & set(path.parts)
+          print('Development source distribution checked')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-base-${{ matrix.os }}
+          path: runs/development-base.json
+  optional-cpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch and base dependencies
+        run: |
+          python -m pip install torch==2.8.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -e ".[test]"
+      - name: Require the optional CPU numerical suites
+        run: python experiments/development/run_tests.py --branch topology_foreground_development_2026-10-27 --branch foreground_distillation_2026-10-27 --require-optional --report runs/development-optional.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-optional-cpu
+          path: runs/development-optional.json

@@ -75,3 +75,18 @@ A run manifest identifies the particular source, inputs and fitted states used f
 All 69 output paths declared by the numerical stage catalog were found in the original local evidence archive. The missing-output list was empty. For this archive comparison, baseline/index outputs were located under the original `prototype/outputs`; the portable producers correctly emit them under the materialized research output root. This presence audit checks producer/path consistency only. It does not certify that the new source has recomputed those outputs or that an output satisfies scientific validation.
 
 The models hook declares no static stage-output list; its independently verified model-asset manifest is generated dynamically. The architecture report is an additional CLI terminal outside the numerical catalog and is covered by report/example integration tests.
+
+# Development release 0.3
+
+The 0.3 source retains the original numerical archive and adds strict channel
+validity, a source-only development suite and a standalone new-capture route.
+The current public checkout passes 218 package/full-cohort tests with seven
+subtests, 131 branch tests, five public-copy contracts, 17 Node review tests
+and the rotation template fixture. Model inference and study-data evaluations
+are separate from these synthetic/import tests.
+
+The private study records additionally include a source-bound 27,126-mask
+YOLO cache, one-genotype held-out foreground comparisons, strict interpolation
+impact/reprediction audits and same-source tracking sensitivity. Their model,
+input, source and output hashes are retained in the research delivery. These
+records do not establish expert anatomical segmentation or calibrated spectra.
